@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
-# Render.com start phase — runs every container boot.
+# Render.com start phase.
 #
-# Reads DATABASE_URL (Render injects this from the linked Postgres service),
-# decomposes it into the flags Odoo expects, and execs Odoo on $PORT.
+# - Parses DATABASE_URL into the env vars Odoo expects.
+# - On first boot (empty DB), initialises the schema with base + custom
+#   modules, then exits. The next exec() starts the HTTP server.
+# - On subsequent boots, the init step is skipped via a fast probe.
 set -euo pipefail
 
 if [ -z "${DATABASE_URL:-}" ]; then
@@ -10,15 +12,14 @@ if [ -z "${DATABASE_URL:-}" ]; then
     exit 1
 fi
 
-# Parse DATABASE_URL into individual fields. Using python so we get correct
-# percent-decoding of the password.
+# ---- decompose DATABASE_URL ---------------------------------------------------
 eval "$(python - <<'PY'
 import os, urllib.parse as up
 u = up.urlparse(os.environ['DATABASE_URL'])
-def emit(key, val):
-    val = "" if val is None else str(val)
-    val = val.replace("'", "'\\''")
-    print(f"export {key}='{val}'")
+def emit(k, v):
+    v = "" if v is None else str(v)
+    v = v.replace("'", "'\\''")
+    print(f"export {k}='{v}'")
 emit("DB_HOST", u.hostname)
 emit("DB_PORT", u.port or 5432)
 emit("DB_USER", up.unquote(u.username) if u.username else "")
@@ -27,23 +28,59 @@ emit("DB_NAME", (u.path or "").lstrip("/"))
 PY
 )"
 
-# Addons: OCA repos cloned in build phase + this repo's custom modules at root.
 ADDONS_PATH="oca/web,oca/account-financial-tools,oca/account-financial-reporting,oca/server-ux,oca/reporting-engine,."
-
-# Render injects $PORT for the public HTTP listener. Odoo's default is 8069.
 HTTP_PORT="${PORT:-8069}"
 
-echo "==> starting Odoo on port ${HTTP_PORT}, db=${DB_NAME}"
-
-exec python -m odoo \
-    --http-port="${HTTP_PORT}" \
-    --addons-path="${ADDONS_PATH}" \
-    --db_host="${DB_HOST}" \
-    --db_port="${DB_PORT}" \
-    --db_user="${DB_USER}" \
-    --db_password="${DB_PASSWORD}" \
-    -d "${DB_NAME}" \
-    --db-filter="^${DB_NAME}\$" \
-    --workers=0 \
-    --proxy-mode \
+ODOO_ARGS=(
+    --addons-path="${ADDONS_PATH}"
+    --db_host="${DB_HOST}"
+    --db_port="${DB_PORT}"
+    --db_user="${DB_USER}"
+    --db_password="${DB_PASSWORD}"
+    -d "${DB_NAME}"
+    --db-filter="^${DB_NAME}\$"
+    --workers=0
+    --proxy-mode
     --without-demo=all
+)
+
+# ---- detect empty DB ----------------------------------------------------------
+INITIALIZED=$(python - <<'PY'
+import os, sys
+try:
+    import psycopg2
+    c = psycopg2.connect(
+        host=os.environ["DB_HOST"],
+        port=int(os.environ["DB_PORT"]),
+        user=os.environ["DB_USER"],
+        password=os.environ["DB_PASSWORD"],
+        dbname=os.environ["DB_NAME"],
+        connect_timeout=10,
+    )
+    cur = c.cursor()
+    cur.execute("SELECT to_regclass('public.ir_module_module') IS NOT NULL")
+    print("yes" if cur.fetchone()[0] else "no")
+    c.close()
+except Exception as e:
+    print(f"probe-failed: {e}", file=sys.stderr)
+    print("unknown")
+PY
+)
+
+if [ "$INITIALIZED" = "no" ]; then
+    echo "==> first boot: initialising database with base + custom modules"
+    python -m odoo "${ODOO_ARGS[@]}" \
+        -i base,web,custom_accounting,omran_dashboard,omran_branding,erp_lock \
+        --stop-after-init
+    echo "==> init complete"
+elif [ "$INITIALIZED" = "yes" ]; then
+    echo "==> database already initialised, skipping init"
+else
+    echo "==> probe failed, attempting init anyway (idempotent)"
+    python -m odoo "${ODOO_ARGS[@]}" \
+        -i base,web,custom_accounting,omran_dashboard,omran_branding,erp_lock \
+        --stop-after-init || true
+fi
+
+echo "==> starting Odoo HTTP on port ${HTTP_PORT}"
+exec python -m odoo "${ODOO_ARGS[@]}" --http-port="${HTTP_PORT}"
