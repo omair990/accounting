@@ -91,13 +91,21 @@ if [ "$INITIALIZED" = "no" ]; then
         -i base,web,custom_accounting,omran_dashboard,omran_branding,erp_lock \
         --stop-after-init
     echo "==> init complete"
+elif [ "$INITIALIZED" = "yes" ]; then
+    echo "==> database already initialised, skipping init"
+else
+    echo "==> probe failed, attempting init anyway (idempotent)"
+    python "$ODOO_BIN" "${ODOO_ARGS[@]}" \
+        -i base,web,custom_accounting,omran_dashboard,omran_branding,erp_lock \
+        --stop-after-init || true
+fi
 
-    # Force every user to land on the OCIT dashboard. The data file in
-    # omran_dashboard does this with noupdate=1 (only runs on first install
-    # of that module), but it can race with admin-user creation in some
-    # scenarios. Re-applying here is idempotent and cheap.
-    echo "==> normalize: set OCIT Home as default action for all users"
-    python "$ODOO_BIN" "${ODOO_ARGS[@]}" --no-http shell <<'PY' 2>&1 | tail -10 || true
+# Always (idempotent): make every user land on the OCIT Home dashboard.
+# The omran_dashboard data file does this with noupdate=1 so it only fires
+# on first install. Re-applying here on every boot keeps the production
+# UX consistent regardless of init outcomes or admin-user creation order.
+echo "==> normalize: set OCIT Home as default action for all users"
+python "$ODOO_BIN" "${ODOO_ARGS[@]}" --no-http shell <<'PY' 2>&1 | tail -10 || true
 action = env.ref('omran_dashboard.action_omran_dashboard', raise_if_not_found=False)
 if action:
     users = env['res.users'].search([])
@@ -107,14 +115,6 @@ if action:
 else:
     print("WARNING: omran_dashboard.action_omran_dashboard not found")
 PY
-elif [ "$INITIALIZED" = "yes" ]; then
-    echo "==> database already initialised, skipping init"
-else
-    echo "==> probe failed, attempting init anyway (idempotent)"
-    python "$ODOO_BIN" "${ODOO_ARGS[@]}" \
-        -i base,web,custom_accounting,omran_dashboard,omran_branding,erp_lock \
-        --stop-after-init || true
-fi
 
 echo "==> starting Odoo HTTP on port ${HTTP_PORT}"
 exec python "$ODOO_BIN" "${ODOO_ARGS[@]}" --http-port="${HTTP_PORT}"
