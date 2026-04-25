@@ -26,6 +26,9 @@ databases:
     user: ocit
     plan: free
     postgresMajorVersion: "16"
+    region: frankfurt          # MUST match the web service region below,
+                               # otherwise the internal dpg-*-a hostname
+                               # won't resolve from the web container.
 
 services:
   - type: web

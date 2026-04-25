@@ -46,5 +46,4 @@ exec python -m odoo \
     --db-filter="^${DB_NAME}\$" \
     --workers=0 \
     --proxy-mode \
-    --without-demo=all \
-    --logfile=/dev/stdout
+    --without-demo=all
