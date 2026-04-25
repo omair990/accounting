@@ -34,12 +34,13 @@ services:
     plan: starter
     region: frankfurt          # oregon | ohio | singapore | frankfurt
     branch: main
-    pythonVersion: "3.11"
     healthCheckPath: /web/login
     autoDeploy: true
     buildCommand: ./deploy/render-build.sh
     startCommand: ./deploy/render-start.sh
     envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.10"
       - key: DATABASE_URL
         fromDatabase:
           name: ocit-db
