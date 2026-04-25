@@ -1,0 +1,391 @@
+/* ============ OCIT — backend branding layer ============ */
+
+:root {
+    --omran-primary: #{$omran-primary};
+    --omran-accent: #{$omran-accent};
+    --omran-secondary: #{$omran-secondary};
+    --omran-surface: #{$omran-surface};
+    --omran-border: #{$omran-border};
+    --omran-text: #{$omran-text};
+    --omran-text-muted: #{$omran-text-muted};
+}
+
+/* -- Top navbar: deep navy gradient -- */
+.o_main_navbar {
+    background: linear-gradient(135deg, #{$omran-secondary} 0%, #{$omran-primary} 100%) !important;
+    border-bottom: 2px solid #{$omran-accent};
+    box-shadow: 0 2px 8px rgba(15, 14, 46, 0.25);
+}
+.o_main_navbar .o_menu_brand,
+.o_main_navbar .o_nav_entry,
+.o_main_navbar .o_menu_entry_lvl_1,
+.o_main_navbar .dropdown-toggle,
+.o_main_navbar a {
+    color: #F1F5F9 !important;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+.o_main_navbar .o_menu_brand {
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+.o_main_navbar .o_nav_entry:hover,
+.o_main_navbar .dropdown-toggle:hover {
+    background: rgba(245, 197, 24, 0.12) !important;
+    color: #{$omran-accent} !important;
+}
+.o_main_navbar .o_menu_brand::after {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #{$omran-accent};
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+/* -- Primary buttons -- */
+.btn-primary,
+.o_form_button_save,
+button.btn-primary {
+    background: #{$omran-primary} !important;
+    border-color: #{$omran-primary} !important;
+    font-weight: 500;
+    box-shadow: 0 1px 2px rgba(30, 27, 75, 0.2);
+    transition: all 0.15s ease;
+}
+.btn-primary:hover,
+.o_form_button_save:hover {
+    background: #{$omran-primary-dk} !important;
+    border-color: #{$omran-primary-dk} !important;
+    box-shadow: 0 2px 6px rgba(30, 27, 75, 0.3);
+}
+
+/* -- Secondary accent buttons -- */
+.btn-warning,
+.btn-info {
+    background: #{$omran-accent} !important;
+    border-color: #{$omran-accent} !important;
+    color: #{$omran-primary} !important;
+    font-weight: 600;
+}
+.btn-warning:hover,
+.btn-info:hover {
+    background: #{$omran-accent-dk} !important;
+    border-color: #{$omran-accent-dk} !important;
+}
+
+/* -- App menu cards -- */
+.o_apps .o_app {
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(30, 27, 75, 0.06);
+    transition: all 0.2s ease;
+    background: #fff;
+    border: 1px solid #{$omran-border};
+}
+.o_apps .o_app:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(30, 27, 75, 0.15);
+    border-color: #{$omran-accent};
+}
+.o_apps .o_caption {
+    color: #{$omran-text};
+    font-weight: 600;
+}
+
+/* -- Form view -- */
+.o_form_view .o_form_statusbar {
+    background: #{$omran-surface};
+    border-bottom: 1px solid #{$omran-border};
+}
+.o_form_view .o_form_sheet {
+    box-shadow: 0 1px 2px rgba(30, 27, 75, 0.04);
+    border-radius: 8px;
+    border: 1px solid #{$omran-border};
+}
+.o_form_view .o_form_button_save {
+    background: #{$omran-primary} !important;
+    color: #fff !important;
+}
+
+/* -- List view -- */
+.o_list_view .o_data_row:hover {
+    background: #F0EFFA !important;
+}
+.o_list_view thead th {
+    font-weight: 600;
+    color: #{$omran-text-muted};
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: #{$omran-surface};
+    border-bottom: 2px solid #{$omran-border};
+    padding: 0.75rem 0.875rem !important;
+}
+
+/* -- Kanban -- */
+.o_kanban_view .o_kanban_record {
+    border-radius: 10px !important;
+    border: 1px solid #{$omran-border} !important;
+    box-shadow: 0 1px 2px rgba(30, 27, 75, 0.04);
+    transition: all 0.15s ease;
+}
+.o_kanban_view .o_kanban_record:hover {
+    box-shadow: 0 6px 16px rgba(30, 27, 75, 0.1);
+    transform: translateY(-1px);
+    border-color: #{$omran-accent};
+}
+.o_kanban_view .o_kanban_group > .o_kanban_header .o_column_title {
+    color: #{$omran-primary};
+    font-weight: 700;
+}
+
+/* -- Chatter -- */
+.o-mail-Chatter {
+    background: #{$omran-surface} !important;
+    border-left: 1px solid #{$omran-border};
+}
+
+/* -- Control panel / breadcrumbs -- */
+.o_control_panel,
+.o_searchview {
+    background: #fff;
+    border-bottom: 1px solid #{$omran-border};
+}
+.o_breadcrumb,
+.o_breadcrumb .breadcrumb-item {
+    color: #{$omran-text};
+    font-weight: 500;
+}
+.o_breadcrumb .active {
+    color: #{$omran-primary};
+    font-weight: 600;
+}
+
+/* -- Tabs -- */
+.nav-tabs .nav-link.active {
+    color: #{$omran-primary} !important;
+    border-bottom: 2px solid #{$omran-accent} !important;
+    font-weight: 600;
+}
+
+/* -- Badges -- */
+.badge.bg-primary {
+    background: #{$omran-primary} !important;
+}
+.badge.bg-warning {
+    background: #{$omran-accent} !important;
+    color: #{$omran-primary} !important;
+}
+
+/* -- Side/home menu: dark navy like the logo background -- */
+.o_home_menu,
+.o_menu_sections,
+.o_sidebar,
+.o_action_manager .o_home_menu_background {
+    background: #{$omran-secondary} !important;
+}
+
+/* ==================================================================
+   Spreadsheet Dashboard — heavy polish (action 299)
+   The ONE dashboard — must feel great
+   ================================================================== */
+.o_action_manager .o_spreadsheet_dashboard_action,
+.o_spreadsheet_dashboard_action {
+    background:
+        radial-gradient(circle at 0% 0%, rgba(30, 27, 75, 0.03) 0%, transparent 40%),
+        #{$omran-surface} !important;
+}
+
+/* Container wrapper */
+.o_spreadsheet_dashboard_action .o_content,
+.o_spreadsheet_dashboard_action > div {
+    padding: 0 !important;
+}
+
+/* Top action bar above the spreadsheet: OCIT header strip */
+.o_spreadsheet_dashboard_action::before {
+    content: "";
+    display: block;
+    position: sticky;
+    top: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #{$omran-primary}, #{$omran-accent}, #{$omran-primary});
+    z-index: 100;
+}
+
+/* Left rail of available dashboards */
+.o_spreadsheet_dashboard_action .o_search_panel,
+.o_spreadsheet_dashboard_action .o_dashboard_list {
+    background: #fff !important;
+    border-right: 1px solid #{$omran-border} !important;
+    padding: 0.75rem 0.5rem !important;
+    min-width: 240px;
+}
+
+/* Section headers inside left rail */
+.o_spreadsheet_dashboard_action .o_search_panel_section_header,
+.o_spreadsheet_dashboard_action .o_dashboard_section h6 {
+    color: #{$omran-text-muted} !important;
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.625rem 0.75rem 0.375rem !important;
+    margin: 0 !important;
+    border-bottom: none !important;
+}
+
+.o_spreadsheet_dashboard_action .o_search_panel_category_value,
+.o_spreadsheet_dashboard_action .o_dashboard_item {
+    padding: 0.625rem 0.875rem !important;
+    border-radius: 8px !important;
+    margin: 0.125rem 0.25rem !important;
+    transition: all 0.15s ease;
+    color: #{$omran-text} !important;
+    font-weight: 500 !important;
+    font-size: 0.9375rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+}
+.o_spreadsheet_dashboard_action .o_search_panel_category_value::before,
+.o_spreadsheet_dashboard_action .o_dashboard_item::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #{$omran-border};
+    transition: background 0.15s ease;
+    flex-shrink: 0;
+}
+.o_spreadsheet_dashboard_action .o_search_panel_category_value:hover,
+.o_spreadsheet_dashboard_action .o_dashboard_item:hover {
+    background: #F1F5F9 !important;
+    color: #{$omran-primary} !important;
+}
+.o_spreadsheet_dashboard_action .o_search_panel_category_value:hover::before,
+.o_spreadsheet_dashboard_action .o_dashboard_item:hover::before {
+    background: #{$omran-accent};
+}
+.o_spreadsheet_dashboard_action .o_search_panel_category_value.active,
+.o_spreadsheet_dashboard_action .o_dashboard_item.active {
+    background: linear-gradient(135deg, #{$omran-primary} 0%, #{$omran-secondary} 100%) !important;
+    color: #fff !important;
+    box-shadow: 0 6px 14px rgba(30, 27, 75, 0.3);
+    font-weight: 600 !important;
+}
+.o_spreadsheet_dashboard_action .o_search_panel_category_value.active::before,
+.o_spreadsheet_dashboard_action .o_dashboard_item.active::before {
+    background: #{$omran-accent};
+}
+
+.o_spreadsheet_dashboard_action .o_dashboard_header,
+.o_spreadsheet_dashboard_action .o-spreadsheet-topbar {
+    background: #fff !important;
+    border-bottom: 1px solid #{$omran-border} !important;
+}
+.o_spreadsheet_dashboard_action h1,
+.o_spreadsheet_dashboard_action h2,
+.o_spreadsheet_dashboard_action .o_dashboard_title {
+    color: #{$omran-primary};
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+/* Spreadsheet body — softer card feel */
+.o-spreadsheet,
+.o-spreadsheet-sheet {
+    background: #fff !important;
+    border-radius: 12px !important;
+    box-shadow: 0 1px 2px rgba(15, 14, 46, 0.04) !important;
+    border: 1px solid #{$omran-border} !important;
+}
+
+/* Selected cell accent */
+.o-spreadsheet .o-grid .o-selection {
+    border-color: #{$omran-primary} !important;
+    background: rgba(30, 27, 75, 0.04) !important;
+}
+
+/* KPI / chart figure cards */
+.o-spreadsheet-figure,
+.o-spreadsheet .o-figure {
+    border-radius: 10px !important;
+    border: 1px solid #{$omran-border} !important;
+    box-shadow: 0 2px 6px rgba(15, 14, 46, 0.05) !important;
+    transition: all 0.2s ease;
+}
+.o-spreadsheet-figure:hover,
+.o-spreadsheet .o-figure:hover {
+    border-color: #{$omran-accent};
+    box-shadow: 0 8px 18px rgba(15, 14, 46, 0.08) !important;
+}
+
+/* Font on the dashboard */
+.o_spreadsheet_dashboard_action,
+.o_spreadsheet_dashboard_action *,
+.o-spreadsheet,
+.o-spreadsheet * {
+    font-family: "Inter", "Tajawal", -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+/* -- Typography: saudi_riyal first (renders Riyal glyph wherever it appears),
+   then Inter for Latin, Tajawal for Arabic.
+   The unicode-range on @font-face for saudi_riyal means it ONLY steps in
+   for codepoints U+20C1 + U+E900; other characters use Inter/Tajawal. -- */
+body, .o_web_client, .o_field_widget, .o_form_view, .o_list_view, .o_kanban_view {
+    font-family: "saudi_riyal", "Inter", "Tajawal", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #{$omran-text};
+    font-feature-settings: "cv11", "ss01", "ss03";
+    letter-spacing: -0.005em;
+}
+
+/* -- Currency / monetary fields: ensure the Saudi Riyal font is tried FIRST,
+      so U+20C1 renders correctly as the new official Riyal glyph -- */
+.o_field_monetary,
+.o_field_monetary *,
+.o_field_widget[name*="amount"],
+.o_field_widget[name*="price"],
+.o_field_widget[name*="total"],
+.o_currency_value,
+span.oe_currency_value,
+.omran_stat .o_field_widget,
+.o_list_view td.o_data_cell.o_monetary_cell,
+.o_form_view .o_field_monetary input {
+    font-family: "saudi_riyal", "Inter", "Tajawal", -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-variant-numeric: tabular-nums;
+}
+
+/* -- Arabic / RTL: Tajawal first -- */
+[dir="rtl"] body, [dir="rtl"] .o_web_client,
+:lang(ar) body, :lang(ar) .o_web_client {
+    font-family: "Tajawal", "Inter", "IBM Plex Sans Arabic", "Noto Sans Arabic", -apple-system, BlinkMacSystemFont, sans-serif !important;
+    letter-spacing: 0;
+}
+
+/* Headings use Inter 600/700 for contrast */
+h1, h2, h3, h4, h5, .o_form_view .oe_title h1,
+.omran_dash_hero h1, .omran_stat_label {
+    font-family: "Inter", "Tajawal", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-feature-settings: "cv11", "ss01";
+}
+
+/* -- Links -- */
+a:not(.btn):not(.nav-link):not(.dropdown-item) {
+    color: #{$omran-primary};
+}
+a:not(.btn):not(.nav-link):not(.dropdown-item):hover {
+    color: #{$omran-primary-dk};
+}
+
+/* -- Focus rings -- */
+input:focus, select:focus, textarea:focus, .form-control:focus {
+    border-color: #{$omran-primary} !important;
+    box-shadow: 0 0 0 3px rgba(30, 27, 75, 0.08) !important;
+    outline: none;
+}

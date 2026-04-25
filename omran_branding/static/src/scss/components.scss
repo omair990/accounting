@@ -1,0 +1,666 @@
+/* ============================================================
+   OCIT — comprehensive component polish
+   Applied globally across every Odoo app (CRM, Sales, HR, etc.)
+   ============================================================ */
+
+/* ---------- STAT BUTTONS (form header pill buttons) ---------- */
+.o_form_view .oe_button_box .oe_stat_button,
+.o_stat_button {
+    border: 1px solid #{$omran-border} !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+    margin: 4px !important;
+    padding: 0.625rem 0.875rem !important;
+    transition: all 0.15s ease;
+    box-shadow: 0 1px 2px rgba(15, 14, 46, 0.04);
+    min-height: 56px;
+}
+.o_form_view .oe_button_box .oe_stat_button:hover {
+    border-color: #{$omran-accent} !important;
+    box-shadow: 0 4px 10px rgba(15, 14, 46, 0.08);
+    transform: translateY(-1px);
+}
+.o_form_view .oe_button_box .oe_stat_button .o_stat_value,
+.o_stat_button .o_stat_value {
+    color: #{$omran-primary} !important;
+    font-weight: 700 !important;
+    font-size: 1.125rem !important;
+}
+.o_form_view .oe_button_box .oe_stat_button .o_stat_text,
+.o_stat_button .o_stat_text {
+    color: #{$omran-text-muted} !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.o_form_view .oe_button_box .oe_stat_button .fa {
+    color: #{$omran-primary};
+}
+
+/* ---------- STATUS BAR (form header stages/states) ---------- */
+.o_form_view .o_form_statusbar {
+    background: #{$omran-surface} !important;
+    padding: 0.5rem 1rem !important;
+    border-bottom: 1px solid #{$omran-border} !important;
+}
+.o_form_view .o_statusbar_status .btn {
+    border: none !important;
+    background: transparent !important;
+    color: #{$omran-text-muted} !important;
+    font-weight: 500 !important;
+    padding: 0.375rem 0.75rem !important;
+    border-radius: 6px !important;
+    font-size: 0.875rem !important;
+}
+.o_form_view .o_statusbar_status .btn.btn-primary,
+.o_form_view .o_statusbar_status .btn-primary:not(.disabled) {
+    background: #{$omran-primary} !important;
+    color: #fff !important;
+    box-shadow: 0 2px 6px rgba(30, 27, 75, 0.2);
+}
+.o_form_view .o_statusbar_status .btn:hover:not(.btn-primary) {
+    background: rgba(30, 27, 75, 0.06) !important;
+    color: #{$omran-primary} !important;
+}
+
+/* ---------- RIBBON (paid, draft, cancelled banners on forms) ---------- */
+.oe_chatter_ribbon,
+.ribbon,
+.o_form_view .ribbon {
+    background: #{$omran-primary} !important;
+    color: #fff !important;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+.ribbon.ribbon-success {
+    background: #{$omran-success} !important;
+}
+.ribbon.ribbon-warning {
+    background: #{$omran-warning} !important;
+    color: #{$omran-primary} !important;
+}
+.ribbon.ribbon-danger {
+    background: #{$omran-danger} !important;
+}
+
+/* ---------- NOTEBOOK TABS (form inner tabs) ---------- */
+.o_notebook > .o_notebook_headers,
+.o_notebook_headers {
+    background: #{$omran-surface} !important;
+    border-bottom: 1px solid #{$omran-border} !important;
+    padding: 0 0.5rem !important;
+}
+.o_notebook_headers .nav-link,
+.o_notebook .nav-item > .nav-link {
+    color: #{$omran-text-muted} !important;
+    font-weight: 500 !important;
+    border: none !important;
+    padding: 0.75rem 1rem !important;
+    border-radius: 0 !important;
+    position: relative;
+    transition: all 0.15s ease;
+}
+.o_notebook_headers .nav-link:hover,
+.o_notebook .nav-item > .nav-link:hover {
+    color: #{$omran-primary} !important;
+    background: transparent !important;
+}
+.o_notebook_headers .nav-link.active,
+.o_notebook .nav-item > .nav-link.active {
+    color: #{$omran-primary} !important;
+    background: transparent !important;
+    font-weight: 600 !important;
+}
+.o_notebook_headers .nav-link.active::after {
+    content: "";
+    position: absolute;
+    bottom: -1px; left: 0.75rem; right: 0.75rem;
+    height: 3px;
+    background: #{$omran-accent};
+    border-radius: 3px 3px 0 0;
+}
+
+/* ---------- DIALOGS / MODALS ---------- */
+.modal-content {
+    border: none !important;
+    border-radius: 14px !important;
+    box-shadow: 0 24px 60px rgba(15, 14, 46, 0.35) !important;
+    overflow: hidden;
+}
+.modal-header {
+    background: #{$omran-primary} !important;
+    color: #fff !important;
+    border-bottom: 3px solid #{$omran-accent} !important;
+    padding: 1rem 1.5rem !important;
+}
+.modal-header .modal-title {
+    font-weight: 600;
+    color: #fff !important;
+    letter-spacing: -0.005em;
+}
+.modal-header .btn-close {
+    filter: brightness(0) invert(1);
+    opacity: 0.8;
+}
+.modal-body {
+    padding: 1.5rem !important;
+}
+.modal-footer {
+    border-top: 1px solid #{$omran-border} !important;
+    background: #{$omran-surface};
+    padding: 0.875rem 1.5rem !important;
+}
+
+/* ---------- TOOLTIPS ---------- */
+.tooltip .tooltip-inner {
+    background: #{$omran-primary} !important;
+    color: #fff !important;
+    font-size: 0.8125rem;
+    border-radius: 6px;
+    padding: 0.375rem 0.625rem;
+    box-shadow: 0 4px 12px rgba(15, 14, 46, 0.2);
+}
+.tooltip .tooltip-arrow::before {
+    border-top-color: #{$omran-primary} !important;
+    border-bottom-color: #{$omran-primary} !important;
+}
+
+/* ---------- NOTIFICATIONS (toasts) ---------- */
+.o_notification {
+    border-radius: 10px !important;
+    box-shadow: 0 8px 20px rgba(15, 14, 46, 0.15) !important;
+    border-left: 4px solid #{$omran-primary} !important;
+}
+.o_notification.border-success { border-left-color: #{$omran-success} !important; }
+.o_notification.border-warning { border-left-color: #{$omran-warning} !important; }
+.o_notification.border-danger  { border-left-color: #{$omran-danger} !important; }
+
+/* ---------- TAGS / CHIPS ---------- */
+.o_tag,
+.o_field_tags .o_tag,
+span.badge-pill {
+    border-radius: 12px !important;
+    font-weight: 500 !important;
+    padding: 0.25rem 0.625rem !important;
+    font-size: 0.8125rem !important;
+    border: 1px solid transparent !important;
+}
+.o_tag.o_tag_color_0 {
+    background: #{$omran-surface} !important;
+    color: #{$omran-text} !important;
+    border-color: #{$omran-border} !important;
+}
+
+/* ---------- PROGRESS BARS ---------- */
+.progress {
+    height: 10px !important;
+    background: #{$omran-surface} !important;
+    border-radius: 999px !important;
+    overflow: hidden;
+}
+.progress .progress-bar {
+    background: linear-gradient(90deg, #{$omran-primary}, #{$omran-accent}) !important;
+    border-radius: 999px;
+}
+
+/* ---------- CHATTER POLISH ---------- */
+.o-mail-Chatter {
+    background: #{$omran-surface} !important;
+}
+.o-mail-Chatter-topbar {
+    border-bottom: 1px solid #{$omran-border} !important;
+    padding: 0.625rem 1rem !important;
+}
+.o-mail-Chatter .o-mail-Composer {
+    background: #fff !important;
+    border-radius: 10px !important;
+    border: 1px solid #{$omran-border} !important;
+    margin: 0.5rem !important;
+}
+.o-mail-Message {
+    padding: 0.75rem !important;
+    border-radius: 10px !important;
+    margin-bottom: 0.5rem !important;
+    background: #fff !important;
+    border: 1px solid #{$omran-border} !important;
+}
+.o-mail-Message:hover {
+    box-shadow: 0 4px 10px rgba(15, 14, 46, 0.06);
+}
+
+/* ---------- ACTIVITIES ---------- */
+.o-mail-ActivityMenu .o-mail-ActivityGroup {
+    border-radius: 8px !important;
+    margin: 0.25rem !important;
+    padding: 0.625rem !important;
+    transition: all 0.15s ease;
+}
+.o-mail-ActivityMenu .o-mail-ActivityGroup:hover {
+    background: #{$omran-surface} !important;
+}
+
+/* ---------- AVATARS ---------- */
+.o_avatar,
+img.o_m2o_avatar,
+.o_image_avatar {
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 3px #{$omran-border};
+    object-fit: cover;
+}
+
+/* ---------- SEARCH / FACETS ---------- */
+.o_searchview {
+    border-radius: 8px;
+    background: #fff !important;
+    padding: 0.375rem 0.75rem !important;
+    transition: all 0.15s ease;
+}
+.o_searchview:focus-within {
+    box-shadow: 0 0 0 3px rgba(30, 27, 75, 0.08);
+    border-color: #{$omran-primary} !important;
+}
+.o_searchview .o_searchview_facet {
+    background: #{$omran-primary} !important;
+    color: #fff !important;
+    border-radius: 6px !important;
+    padding: 0.125rem 0.5rem !important;
+    font-size: 0.8125rem !important;
+}
+.o_searchview .o_searchview_facet .o_facet_remove {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* ---------- PAGINATION ---------- */
+.o_pager {
+    color: #{$omran-text-muted};
+    font-weight: 500;
+}
+.o_pager .o_pager_counter {
+    color: #{$omran-text};
+}
+.o_pager button {
+    color: #{$omran-primary} !important;
+}
+
+/* ---------- DATE / DATETIME PICKER ---------- */
+.o_datetime_picker,
+.bootstrap-datetimepicker-widget {
+    border-radius: 12px !important;
+    border: 1px solid #{$omran-border} !important;
+    box-shadow: 0 12px 28px rgba(15, 14, 46, 0.15) !important;
+    background: #fff !important;
+}
+.o_datetime_picker th,
+.bootstrap-datetimepicker-widget th {
+    color: #{$omran-text-muted} !important;
+    font-weight: 600 !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.o_datetime_picker td.active,
+.o_datetime_picker td.today,
+.bootstrap-datetimepicker-widget td.active {
+    background: #{$omran-primary} !important;
+    color: #fff !important;
+    border-radius: 6px !important;
+}
+
+/* ---------- DROPDOWNS ---------- */
+.dropdown-menu {
+    border: 1px solid #{$omran-border} !important;
+    border-radius: 10px !important;
+    box-shadow: 0 12px 28px rgba(15, 14, 46, 0.12) !important;
+    padding: 0.375rem !important;
+}
+.dropdown-item {
+    padding: 0.4375rem 0.75rem !important;
+    border-radius: 6px !important;
+    font-size: 0.9375rem !important;
+    transition: all 0.1s ease;
+    color: #{$omran-text} !important;
+}
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background: #{$omran-surface} !important;
+    color: #{$omran-primary} !important;
+}
+.dropdown-item.active,
+.dropdown-item:active {
+    background: #{$omran-primary} !important;
+    color: #fff !important;
+}
+.dropdown-divider {
+    border-top-color: #{$omran-border} !important;
+    margin: 0.375rem 0 !important;
+}
+
+/* ---------- ACTION BUTTONS PANEL ---------- */
+.o_cp_action_menus .btn,
+.o_cp_buttons .btn {
+    border-radius: 8px !important;
+    font-weight: 500 !important;
+    transition: all 0.15s ease;
+}
+
+/* ---------- SIDEBAR / SEARCH PANEL ---------- */
+.o_search_panel {
+    background: #fff !important;
+    border-right: 1px solid #{$omran-border} !important;
+    padding: 0.75rem !important;
+}
+.o_search_panel_section_header {
+    color: #{$omran-text-muted} !important;
+    font-weight: 700 !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.5rem 0.625rem !important;
+}
+.o_search_panel_category_value,
+.o_search_panel_filter_value {
+    padding: 0.4375rem 0.625rem !important;
+    border-radius: 6px !important;
+    margin: 0.0625rem 0 !important;
+    transition: all 0.1s ease;
+}
+.o_search_panel_category_value:hover,
+.o_search_panel_filter_value:hover {
+    background: #{$omran-surface} !important;
+}
+.o_search_panel_category_value.active,
+.o_search_panel_filter_value.active {
+    background: #{$omran-primary} !important;
+    color: #fff !important;
+}
+
+/* ---------- SETTINGS PAGE ---------- */
+.settings_tab,
+.o_settings_container .app_settings_block {
+    border-radius: 12px;
+    border: 1px solid #{$omran-border};
+    background: #fff;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    transition: all 0.15s ease;
+}
+.settings_tab:hover,
+.o_settings_container .app_settings_block:hover {
+    box-shadow: 0 4px 12px rgba(15, 14, 46, 0.06);
+    border-color: #{$omran-accent};
+}
+
+/* ---------- KANBAN STATUS DOTS (stage indicators) ---------- */
+.o_kanban_view .o_status {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+.o_kanban_view .o_status.o_status_green { background: #{$omran-success} !important; }
+.o_kanban_view .o_status.o_status_red   { background: #{$omran-danger} !important; }
+
+/* ---------- CRM PIPELINE specific touches ---------- */
+.o_kanban_view.o_crm_lead_kanban .o_kanban_group_header {
+    background: linear-gradient(180deg, #{$omran-surface}, #fff);
+    border-bottom: 2px solid #{$omran-primary};
+    border-radius: 8px 8px 0 0;
+}
+
+/* ---------- HR EMPLOYEE KANBAN specific touches ---------- */
+.o_kanban_view.o_hr_employee_kanban .o_kanban_record {
+    border-radius: 12px !important;
+    text-align: center;
+}
+
+/* ---------- SALES / INVOICE LIST visual emphasis on totals ---------- */
+.o_list_view tfoot td {
+    background: #{$omran-surface} !important;
+    font-weight: 700 !important;
+    color: #{$omran-primary} !important;
+    border-top: 2px solid #{$omran-primary} !important;
+}
+
+/* ---------- SIGNATURES / IMAGE WIDGETS ---------- */
+.o_field_image img,
+.o_attachment_image img {
+    border-radius: 10px;
+    border: 1px solid #{$omran-border};
+}
+
+/* ---------- SWITCHES / CHECKBOXES ---------- */
+.form-check-input:checked {
+    background-color: #{$omran-primary} !important;
+    border-color: #{$omran-primary} !important;
+}
+.form-check-input:focus {
+    box-shadow: 0 0 0 3px rgba(30, 27, 75, 0.15) !important;
+}
+
+/* ---------- BREADCRUMB HOVER ---------- */
+.o_breadcrumb .breadcrumb-item a:hover {
+    color: #{$omran-primary};
+    text-decoration: none;
+}
+
+/* ---------- GRADIENT ACCENT LINE UNDER NAVBAR ---------- */
+.o_main_navbar + * {
+    position: relative;
+}
+
+/* ---------- GENERAL CARD UPLIFT ---------- */
+.card, .o_card {
+    border-radius: 12px !important;
+    border: 1px solid #{$omran-border} !important;
+    box-shadow: 0 1px 2px rgba(15, 14, 46, 0.04);
+}
+
+/* ---------- KANBAN COLUMN FOLDED STATE ---------- */
+.o_kanban_view .o_column_folded {
+    background: #{$omran-primary} !important;
+    color: #fff !important;
+    border-radius: 10px;
+    writing-mode: vertical-rl;
+}
+
+/* ---------- ALERT BANNERS (Your database will expire, etc.) ---------- */
+.alert {
+    border-radius: 10px !important;
+    border: none !important;
+    padding: 0.75rem 1rem !important;
+}
+.alert-info {
+    background: rgba(30, 27, 75, 0.08) !important;
+    color: #{$omran-primary} !important;
+    border-left: 4px solid #{$omran-primary} !important;
+}
+.alert-warning {
+    background: rgba(217, 119, 6, 0.08) !important;
+    color: #{$omran-warning} !important;
+    border-left: 4px solid #{$omran-warning} !important;
+}
+.alert-success {
+    background: rgba(22, 163, 74, 0.08) !important;
+    color: #{$omran-success} !important;
+    border-left: 4px solid #{$omran-success} !important;
+}
+.alert-danger {
+    background: rgba(220, 38, 38, 0.08) !important;
+    color: #{$omran-danger} !important;
+    border-left: 4px solid #{$omran-danger} !important;
+}
+
+/* ---------- USER MENU AVATAR ---------- */
+.o_main_navbar .o_user_menu img,
+.o_main_navbar .o_avatar {
+    box-shadow: 0 0 0 2px #{$omran-accent} !important;
+}
+
+/* ==================================================================
+   ACCOUNTING APP specific polish (Invoicing menu)
+   ================================================================== */
+
+/* -- Journal dashboard: the big kanban cards on the Accounting home -- */
+.o_account_kanban .o_kanban_record,
+.o_kanban_view.o_kanban_dashboard .o_kanban_record {
+    border-radius: 14px !important;
+    border: 1px solid #{$omran-border} !important;
+    background: #fff !important;
+    box-shadow: 0 2px 6px rgba(15, 14, 46, 0.06);
+    padding: 0 !important;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+.o_account_kanban .o_kanban_record:hover,
+.o_kanban_view.o_kanban_dashboard .o_kanban_record:hover {
+    box-shadow: 0 12px 28px rgba(15, 14, 46, 0.12);
+    transform: translateY(-3px);
+    border-color: #{$omran-accent};
+}
+
+.o_account_kanban .o_kanban_record .o_kanban_card_header,
+.o_kanban_view.o_kanban_dashboard .o_kanban_primary_left {
+    background: linear-gradient(135deg, #{$omran-primary} 0%, #{$omran-secondary} 100%) !important;
+    color: #fff !important;
+    padding: 1rem 1.25rem !important;
+    border-bottom: 3px solid #{$omran-accent};
+}
+.o_account_kanban .o_kanban_record .o_kanban_card_header a,
+.o_account_kanban .o_kanban_record .o_kanban_card_header span,
+.o_account_kanban .o_kanban_record .o_primary {
+    color: #fff !important;
+    font-weight: 600 !important;
+}
+
+.o_account_kanban .o_kanban_record .o_kanban_card_content,
+.o_kanban_view.o_kanban_dashboard .o_kanban_card_content {
+    padding: 1rem 1.25rem !important;
+}
+
+/* Journal dashboard stat numbers */
+.o_account_kanban .o_primary,
+.o_account_kanban .o_secondary,
+.o_kanban_view.o_kanban_dashboard .o_primary {
+    font-weight: 600;
+    color: #{$omran-text};
+}
+
+.o_account_kanban .o_kanban_record .o_dashboard_action {
+    color: #{$omran-primary} !important;
+    font-weight: 600;
+    border-top: 1px solid #{$omran-border};
+    padding: 0.625rem 1.25rem !important;
+    transition: background 0.15s ease;
+}
+.o_account_kanban .o_kanban_record .o_dashboard_action:hover {
+    background: #{$omran-surface} !important;
+    color: #{$omran-primary} !important;
+}
+
+/* Bank sync / reconciliation buttons */
+.o_account_kanban .o_dashboard_graph {
+    padding: 0.5rem 1rem;
+}
+
+/* -- Invoice form: totals highlight -- */
+.o_form_view .o_account_invoice_total,
+.o_form_view [class*="subtotal"],
+.o_form_view .oe_subtotal_footer {
+    background: #{$omran-surface};
+    border-radius: 10px;
+    padding: 1rem 1.25rem !important;
+    margin-top: 0.5rem;
+    border: 1px solid #{$omran-border};
+}
+.o_form_view .oe_subtotal_footer .o_total label,
+.o_form_view .oe_subtotal_footer .o_total .o_field_widget {
+    color: #{$omran-primary} !important;
+    font-weight: 700 !important;
+    font-size: 1.25rem !important;
+}
+
+/* -- Payment state widget (paid/partial/unpaid/overdue pills) -- */
+.o_payment_term_pill,
+.oe_avatar + div .badge,
+.badge.o_field_badge {
+    padding: 0.25rem 0.625rem !important;
+    border-radius: 999px !important;
+    font-weight: 600 !important;
+    font-size: 0.75rem !important;
+    letter-spacing: 0.03em;
+}
+
+/* -- Register Payment modal: tighter and branded -- */
+.modal-dialog .o_form_view [name="payment_register"] {
+    padding: 0.5rem;
+}
+
+/* -- Accounting statusbar coloring per state -- */
+.o_form_view[data-model="account.move"] .o_form_statusbar .o_arrow_button.btn-primary {
+    background: #{$omran-primary} !important;
+    border-color: #{$omran-primary} !important;
+}
+
+/* -- Invoice lines list inside form: cleaner header -- */
+.o_form_view [name="invoice_line_ids"] thead,
+.o_form_view [name="line_ids"] thead {
+    background: #{$omran-surface} !important;
+}
+.o_form_view [name="invoice_line_ids"] thead th,
+.o_form_view [name="line_ids"] thead th {
+    color: #{$omran-text-muted} !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.625rem 0.75rem !important;
+}
+
+/* -- Chart of Accounts list: show types as pills -- */
+.o_list_view[data-model="account.account"] td .badge,
+.o_list_view[data-model="account.account"] .o_field_badge {
+    background: #{$omran-primary} !important;
+    color: #fff !important;
+    border-radius: 999px;
+    padding: 0.125rem 0.5rem;
+}
+
+/* -- Bank/Cash journal card: reconcile button accent -- */
+.o_account_kanban [name="action_create_new"],
+.o_account_kanban [name="action_open_reconcile"] {
+    color: #{$omran-accent} !important;
+    font-weight: 600 !important;
+}
+
+/* -- Accounting reports: side filters -- */
+.o_account_reports .o_account_report_filter_button,
+.o_account_report .o_account_reports_filter_widget {
+    border-radius: 8px !important;
+    border: 1px solid #{$omran-border} !important;
+    background: #fff !important;
+    padding: 0.375rem 0.75rem !important;
+}
+.o_account_reports .o_account_reports_filter_widget.active {
+    background: #{$omran-primary} !important;
+    color: #fff !important;
+    border-color: #{$omran-primary} !important;
+}
+
+/* -- Report table header: branded -- */
+.o_account_report table thead th,
+.o_account_reports_no_print tbody tr th {
+    background: #{$omran-surface} !important;
+    color: #{$omran-primary} !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+/* -- Report totals row -- */
+.o_account_reports_totals_below_sections,
+.o_account_report tr.total,
+.o_account_reports_totals {
+    background: #{$omran-surface} !important;
+    font-weight: 700 !important;
+    color: #{$omran-primary} !important;
+    border-top: 2px solid #{$omran-primary} !important;
+}

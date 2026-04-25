@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Activate Saudi Riyal and set the official symbol -->
+    <record id="base.SAR" model="res.currency">
+        <field name="active" eval="True"/>
+        <field name="symbol">﷼</field>
+        <field name="position">after</field>
+        <field name="decimal_places">2</field>
+    </record>
+
+    <record id="base.main_company" model="res.company">
+        <field name="name">OCIT - Omran</field>
+        <field name="email">info@ocit.sa</field>
+        <field name="phone">+966 545902993</field>
+        <field name="website">https://www.ocit.sa</field>
+        <field name="street">King Abdulaziz Road</field>
+        <field name="street2">Al-Shati District</field>
+        <field name="city">Jeddah</field>
+        <field name="zip">23613</field>
+        <field name="country_id" ref="base.sa"/>
+        <field name="currency_id" ref="base.SAR"/>
+        <field name="primary_color">#1E1B4B</field>
+        <field name="secondary_color">#F5C518</field>
+        <field name="logo" type="base64" file="omran_branding/static/src/img/logo.png"/>
+    </record>
+
+    <record id="base.partner_admin" model="res.partner">
+        <field name="name">OCIT - Omran</field>
+        <field name="email">info@ocit.sa</field>
+    </record>
+</odoo>

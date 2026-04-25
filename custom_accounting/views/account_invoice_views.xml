@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Invoice: Tree View -->
+    <record id="view_account_invoice_tree" model="ir.ui.view">
+        <field name="name">account.move.invoice.tree</field>
+        <field name="model">account.move</field>
+        <field name="arch" type="xml">
+            <tree string="Invoices"
+                  decoration-info="state == 'draft'"
+                  decoration-danger="is_overdue == True"
+                  decoration-success="payment_state == 'paid'"
+                  decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="invoice_date"/>
+                <field name="invoice_date_due"/>
+                <field name="partner_id"/>
+                <field name="invoice_origin" optional="show"/>
+                <field name="amount_untaxed" sum="Untaxed"/>
+                <field name="amount_tax" sum="Tax" optional="show"/>
+                <field name="amount_total" sum="Total"/>
+                <field name="amount_residual" sum="Amount Due"/>
+                <field name="payment_state" widget="badge"
+                    decoration-success="payment_state == 'paid'"
+                    decoration-warning="payment_state == 'partial'"
+                    decoration-danger="payment_state == 'not_paid'"/>
+                <field name="state" widget="badge"
+                    decoration-success="state == 'posted'"
+                    decoration-info="state == 'draft'"/>
+                <field name="is_overdue" column_invisible="1"/>
+                <field name="currency_id" column_invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Invoice: Form View -->
+    <record id="view_account_invoice_form" model="ir.ui.view">
+        <field name="name">account.move.invoice.form</field>
+        <field name="model">account.move</field>
+        <field name="arch" type="xml">
+            <form string="Invoice">
+                <header>
+                    <button name="action_post" string="Confirm" type="object"
+                        class="oe_highlight"
+                        invisible="state != 'draft'"/>
+                    <button name="%(custom_accounting.action_payment_register_wizard)d"
+                        string="Register Payment" type="action"
+                        class="oe_highlight"
+                        invisible="state != 'posted' or payment_state == 'paid'"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                        invisible="state != 'posted'"
+                        confirm="Are you sure you want to cancel?"/>
+                    <button name="action_draft" string="Reset to Draft" type="object"
+                        invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="draft,posted"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_payments" type="object"
+                            class="oe_stat_button" icon="fa-money"
+                            invisible="payment_count == 0">
+                            <field name="payment_count" widget="statinfo" string="Payments"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <span class="o_form_label"
+                            invisible="move_type != 'out_invoice'">Customer Invoice</span>
+                        <span class="o_form_label"
+                            invisible="move_type != 'in_invoice'">Vendor Bill</span>
+                        <span class="o_form_label"
+                            invisible="move_type != 'out_refund'">Credit Note</span>
+                        <span class="o_form_label"
+                            invisible="move_type != 'in_refund'">Vendor Credit Note</span>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <field name="company_id" invisible="1"/>
+                    <group>
+                        <group>
+                            <field name="partner_id" string="Customer"
+                                invisible="move_type not in ('out_invoice', 'out_refund')"/>
+                            <field name="partner_id" string="Vendor"
+                                invisible="move_type not in ('in_invoice', 'in_refund')"/>
+                            <field name="invoice_origin"/>
+                            <field name="ref" string="Payment Reference"/>
+                        </group>
+                        <group>
+                            <field name="invoice_date"/>
+                            <field name="invoice_date_due"/>
+                            <field name="journal_id"
+                                domain="[('type', '=', 'sale')]"
+                                invisible="move_type not in ('out_invoice', 'out_refund')"/>
+                            <field name="journal_id"
+                                domain="[('type', '=', 'purchase')]"
+                                invisible="move_type not in ('in_invoice', 'in_refund')"/>
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                            <field name="move_type" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Invoice Lines">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="company_id" column_invisible="1"/>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="account_id"/>
+                                    <field name="name" string="Description"/>
+                                    <field name="quantity"/>
+                                    <field name="price_unit" string="Price"/>
+                                    <field name="discount" optional="show"/>
+                                    <field name="tax_ids" widget="many2many_tags"/>
+                                    <field name="price_subtotal" string="Subtotal" optional="show"/>
+                                    <field name="debit" sum="Total Debit"/>
+                                    <field name="credit" sum="Total Credit"/>
+                                    <field name="is_tax_line" column_invisible="1"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </tree>
+                            </field>
+
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="amount_untaxed" string="Subtotal"/>
+                                <field name="amount_tax" string="Taxes"/>
+                                <div class="oe_subtotal_footer_separator">
+                                    <field name="amount_total" class="oe_subtotal_footer_separator"/>
+                                </div>
+                                <field name="amount_residual" string="Amount Due"
+                                    invisible="state != 'posted'" class="oe_subtotal_footer_separator"/>
+                            </group>
+                        </page>
+                        <page string="Other Info">
+                            <group>
+                                <group string="Accounting">
+                                    <field name="move_type" readonly="1"/>
+                                    <field name="company_id" groups="base.group_multi_company"/>
+                                    <field name="invoice_payment_term"/>
+                                </group>
+                                <group string="Status">
+                                    <field name="payment_state"
+                                        invisible="state != 'posted'"/>
+                                    <field name="is_overdue"
+                                        invisible="not is_overdue"/>
+                                    <field name="days_overdue"
+                                        invisible="not is_overdue"/>
+                                    <field name="date"/>
+                                </group>
+                            </group>
+                            <separator string="Terms &amp; Conditions"/>
+                            <field name="narration" placeholder="Payment terms, notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Invoice: Search View -->
+    <record id="view_account_invoice_search" model="ir.ui.view">
+        <field name="name">account.move.invoice.search</field>
+        <field name="model">account.move</field>
+        <field name="arch" type="xml">
+            <search string="Search Invoices">
+                <field name="name" string="Number"/>
+                <field name="partner_id" string="Customer/Vendor"/>
+                <field name="ref" string="Reference"/>
+                <field name="invoice_origin" string="Source"/>
+                <separator/>
+                <filter name="filter_draft" string="Draft"
+                    domain="[('state', '=', 'draft')]"/>
+                <filter name="filter_posted" string="Posted"
+                    domain="[('state', '=', 'posted')]"/>
+                <separator/>
+                <filter name="filter_not_paid" string="Not Paid"
+                    domain="[('payment_state', '=', 'not_paid'), ('state', '=', 'posted')]"/>
+                <filter name="filter_partial" string="Partially Paid"
+                    domain="[('payment_state', '=', 'partial')]"/>
+                <filter name="filter_paid" string="Paid"
+                    domain="[('payment_state', '=', 'paid')]"/>
+                <separator/>
+                <filter name="filter_overdue" string="Overdue"
+                    domain="[('is_overdue', '=', True)]"/>
+                <separator/>
+                <filter name="filter_this_month" string="This Month"
+                    domain="[('invoice_date', '&gt;=', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_partner" string="Partner"
+                        context="{'group_by': 'partner_id'}"/>
+                    <filter name="group_state" string="Status"
+                        context="{'group_by': 'state'}"/>
+                    <filter name="group_payment_state" string="Payment Status"
+                        context="{'group_by': 'payment_state'}"/>
+                    <filter name="group_date" string="Invoice Date"
+                        context="{'group_by': 'invoice_date:month'}"/>
+                    <filter name="group_due_date" string="Due Date"
+                        context="{'group_by': 'invoice_date_due:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_account_invoice_out" model="ir.actions.act_window">
+        <field name="name">Invoices</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('move_type', '=', 'out_invoice')]</field>
+        <field name="context">{'default_move_type': 'out_invoice'}</field>
+        <field name="search_view_id" ref="view_account_invoice_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first invoice
+            </p>
+            <p>Create professional invoices and track payments.</p>
+        </field>
+    </record>
+
+    <record id="action_account_invoice_in" model="ir.actions.act_window">
+        <field name="name">Bills</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('move_type', '=', 'in_invoice')]</field>
+        <field name="context">{'default_move_type': 'in_invoice'}</field>
+        <field name="search_view_id" ref="view_account_invoice_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Record a vendor bill
+            </p>
+        </field>
+    </record>
+
+    <record id="action_account_credit_note_out" model="ir.actions.act_window">
+        <field name="name">Credit Notes</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('move_type', '=', 'out_refund')]</field>
+        <field name="context">{'default_move_type': 'out_refund'}</field>
+    </record>
+
+    <record id="action_account_credit_note_in" model="ir.actions.act_window">
+        <field name="name">Vendor Credit Notes</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('move_type', '=', 'in_refund')]</field>
+        <field name="context">{'default_move_type': 'in_refund'}</field>
+    </record>
+</odoo>

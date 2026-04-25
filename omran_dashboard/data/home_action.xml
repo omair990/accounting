@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Set the dashboard as default home action for all existing users -->
+    <function model="res.users" name="write">
+        <function model="res.users" name="search" eval="[[]]"/>
+        <value eval="{'action_id': ref('action_omran_dashboard')}"/>
+    </function>
+</odoo>

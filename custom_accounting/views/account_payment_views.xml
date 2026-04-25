@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Payment: Tree View -->
+    <record id="view_account_payment_tree" model="ir.ui.view">
+        <field name="name">account.payment.tree</field>
+        <field name="model">account.payment</field>
+        <field name="arch" type="xml">
+            <tree string="Payments"
+                  decoration-info="state == 'draft'"
+                  decoration-muted="state == 'cancelled'"
+                  decoration-success="state == 'reconciled'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="payment_type"/>
+                <field name="partner_id"/>
+                <field name="journal_id"/>
+                <field name="amount" sum="Total"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="memo" optional="show"/>
+                <field name="state" widget="badge"
+                    decoration-success="state in ('posted', 'reconciled')"
+                    decoration-info="state == 'draft'"
+                    decoration-muted="state == 'cancelled'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Payment: Form View -->
+    <record id="view_account_payment_form" model="ir.ui.view">
+        <field name="name">account.payment.form</field>
+        <field name="model">account.payment</field>
+        <field name="arch" type="xml">
+            <form string="Payment">
+                <header>
+                    <button name="action_post" string="Confirm" type="object"
+                        class="oe_highlight"
+                        invisible="state != 'draft'"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                        invisible="state not in ('posted', 'sent')"
+                        confirm="This will unreconcile any matched invoices. Continue?"/>
+                    <button name="action_draft" string="Reset to Draft" type="object"
+                        invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="draft,posted,reconciled"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoices" type="object"
+                            class="oe_stat_button" icon="fa-file-text-o"
+                            invisible="reconciled_invoices_count == 0">
+                            <field name="reconciled_invoices_count" widget="statinfo"
+                                string="Invoices"/>
+                        </button>
+                    </div>
+                    <field name="company_id" invisible="1"/>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"
+                            invisible="name == '/'"/></h1>
+                    </div>
+                    <group>
+                        <group string="Payment Info">
+                            <field name="payment_type" widget="radio"/>
+                            <field name="partner_type"/>
+                            <field name="partner_id"/>
+                            <field name="amount"/>
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                        </group>
+                        <group string="Method">
+                            <field name="date"/>
+                            <field name="journal_id"/>
+                            <field name="destination_account_id" readonly="1"/>
+                            <field name="memo" placeholder="e.g. Invoice INV/2026/0001"/>
+                            <field name="payment_reference" placeholder="e.g. Check #1234"/>
+                        </group>
+                    </group>
+                    <group invisible="not move_id">
+                        <group string="Accounting">
+                            <field name="move_id" readonly="1"/>
+                            <field name="is_reconciled"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Payment: Search View -->
+    <record id="view_account_payment_search" model="ir.ui.view">
+        <field name="name">account.payment.search</field>
+        <field name="model">account.payment</field>
+        <field name="arch" type="xml">
+            <search string="Search Payments">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="journal_id"/>
+                <field name="memo"/>
+                <separator/>
+                <filter name="filter_inbound" string="Received"
+                    domain="[('payment_type', '=', 'inbound')]"/>
+                <filter name="filter_outbound" string="Sent"
+                    domain="[('payment_type', '=', 'outbound')]"/>
+                <separator/>
+                <filter name="filter_draft" string="Draft"
+                    domain="[('state', '=', 'draft')]"/>
+                <filter name="filter_posted" string="Posted"
+                    domain="[('state', '=', 'posted')]"/>
+                <filter name="filter_reconciled" string="Reconciled"
+                    domain="[('is_reconciled', '=', True)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_partner" string="Partner"
+                        context="{'group_by': 'partner_id'}"/>
+                    <filter name="group_journal" string="Journal"
+                        context="{'group_by': 'journal_id'}"/>
+                    <filter name="group_date" string="Date"
+                        context="{'group_by': 'date:month'}"/>
+                    <filter name="group_type" string="Type"
+                        context="{'group_by': 'payment_type'}"/>
+                    <filter name="group_state" string="Status"
+                        context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_account_payment" model="ir.actions.act_window">
+        <field name="name">Payments</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_account_payment_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Register a payment
+            </p>
+        </field>
+    </record>
+
+    <record id="action_account_payment_inbound" model="ir.actions.act_window">
+        <field name="name">Customer Payments</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('payment_type', '=', 'inbound')]</field>
+        <field name="context">{'default_payment_type': 'inbound', 'default_partner_type': 'customer'}</field>
+        <field name="search_view_id" ref="view_account_payment_search"/>
+    </record>
+
+    <record id="action_account_payment_outbound" model="ir.actions.act_window">
+        <field name="name">Vendor Payments</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('payment_type', '=', 'outbound')]</field>
+        <field name="context">{'default_payment_type': 'outbound', 'default_partner_type': 'supplier'}</field>
+        <field name="search_view_id" ref="view_account_payment_search"/>
+    </record>
+</odoo>

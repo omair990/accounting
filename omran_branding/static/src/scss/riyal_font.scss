@@ -1,0 +1,20 @@
+/* Local Saudi Riyal symbol font — maps U+20C1 (new official codepoint)
+   and U+E900 (private-use fallback) to the official SAMA glyph */
+@font-face {
+    font-family: "saudi_riyal";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("/omran_branding/static/src/fonts/saudi_riyal_regular.woff2") format("woff2"),
+         url("/omran_branding/static/src/fonts/saudi_riyal_regular.woff") format("woff");
+    unicode-range: U+20C1, U+E900;
+}
+@font-face {
+    font-family: "saudi_riyal";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url("/omran_branding/static/src/fonts/saudi_riyal_bold.woff2") format("woff2"),
+         url("/omran_branding/static/src/fonts/saudi_riyal_bold.woff") format("woff");
+    unicode-range: U+20C1, U+E900;
+}

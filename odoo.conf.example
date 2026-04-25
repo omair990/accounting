@@ -1,0 +1,34 @@
+[options]
+; ------ Database ------
+db_host = localhost
+db_port = 5432
+db_user = CHANGE_ME
+db_password = CHANGE_ME
+db_name = CHANGE_ME
+
+; ------ Server ------
+http_port = 8069
+xmlrpc_port = 8069
+admin_passwd = CHANGE_ME_TO_A_LONG_RANDOM_STRING
+
+; ------ Addons path (community + OCA + custom) ------
+; Adjust paths to match your local checkout layout.
+addons_path = ./odoo/addons,./odoo/odoo/addons,./oca/web,./oca/account-financial-tools,./oca/account-financial-reporting,./oca/server-ux,./oca/reporting-engine,./oca,.
+
+; ------ Misc ------
+data_dir = ./.odoo_data
+logfile = ./odoo.log
+log_level = info
+log_handler = :INFO
+workers = 0
+max_cron_threads = 2
+limit_memory_soft = 2147483648
+limit_memory_hard = 2684354560
+limit_time_cpu = 600
+limit_time_real = 1200
+limit_request = 8192
+proxy_mode = False
+list_db = False
+dbfilter = ^CHANGE_ME$
+without_demo = all
+db_maxconn = 64

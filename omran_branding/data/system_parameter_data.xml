@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="param_web_title" model="ir.config_parameter">
+        <field name="key">web.base.title</field>
+        <field name="value">OCIT ERP</field>
+    </record>
+    <record id="param_ws_display_name" model="ir.config_parameter">
+        <field name="key">ws_display_name</field>
+        <field name="value">OCIT</field>
+    </record>
+</odoo>

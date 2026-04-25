@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Accounting Dashboard: Kanban View of Journals -->
+    <record id="view_account_journal_dashboard_kanban" model="ir.ui.view">
+        <field name="name">account.journal.dashboard.kanban</field>
+        <field name="model">account.journal</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_dashboard" create="false">
+                <field name="name"/>
+                <field name="type"/>
+                <field name="code"/>
+                <field name="color"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''} oe_kanban_global_click">
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary">
+                                        <field name="name"/>
+                                    </div>
+                                    <div class="o_secondary">
+                                        <field name="type"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container o_kanban_card_content">
+                                <div class="row">
+                                    <div class="col-6 o_kanban_primary_left">
+                                        <span class="fw-bold">Code: </span>
+                                        <field name="code"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Action: Dashboard -->
+    <record id="action_account_dashboard" model="ir.actions.act_window">
+        <field name="name">Accounting Dashboard</field>
+        <field name="res_model">account.journal</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Welcome to the Accounting Dashboard
+            </p>
+            <p>
+                Configure your journals to start recording transactions.
+            </p>
+        </field>
+    </record>
+
+    <!-- Overdue Invoices Action (smart button style) -->
+    <record id="action_overdue_invoices" model="ir.actions.act_window">
+        <field name="name">Overdue Invoices</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_overdue', '=', True)]</field>
+        <field name="context">{'search_default_filter_overdue': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No overdue invoices!
+            </p>
+        </field>
+    </record>
+</odoo>

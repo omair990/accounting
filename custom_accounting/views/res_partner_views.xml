@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Partner: Inherit form to add accounting tab -->
+    <record id="view_res_partner_form_accounting" model="ir.ui.view">
+        <field name="name">res.partner.form.accounting</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Accounting" name="accounting">
+                    <group>
+                        <group string="Account Settings">
+                            <field name="property_account_receivable_id"/>
+                            <field name="property_account_payable_id"/>
+                            <field name="default_payment_days"/>
+                            <field name="credit_limit"/>
+                        </group>
+                        <group string="Balances">
+                            <field name="total_receivable"/>
+                            <field name="total_payable"/>
+                            <field name="total_overdue"/>
+                            <field name="customer_rank" invisible="1"/>
+                            <field name="supplier_rank" invisible="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="payment_terms_note" placeholder="Payment terms and conditions..."/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Customers action (partner with customer_rank > 0) -->
+    <record id="action_customers" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('customer_rank', '>', 0)]</field>
+        <field name="context">{'default_customer_rank': 1}</field>
+    </record>
+
+    <!-- Vendors action -->
+    <record id="action_vendors" model="ir.actions.act_window">
+        <field name="name">Vendors</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('supplier_rank', '>', 0)]</field>
+        <field name="context">{'default_supplier_rank': 1}</field>
+    </record>
+</odoo>

@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_omran_dashboard_form" model="ir.ui.view">
+        <field name="name">omran.dashboard.form</field>
+        <field name="model">omran.dashboard</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false" delete="false" class="o_omran_dashboard o_omran_dashboard_pro">
+                <sheet>
+                    <!-- HERO -->
+                    <div class="omran_hero">
+                        <div class="omran_hero_inner">
+                            <div class="omran_hero_eyebrow">OCIT · Omran IT</div>
+                            <h1 class="omran_hero_title">Welcome back</h1>
+                            <p class="omran_hero_sub">Your live business snapshot. All values in Saudi Riyal.</p>
+                        </div>
+                        <div class="omran_hero_badge">
+                            <div class="omran_hero_dot"></div>
+                            <div class="omran_hero_label">LIVE</div>
+                        </div>
+                    </div>
+
+                    <!-- PRIMARY KPIs -->
+                    <div class="omran_kpi_row omran_kpi_row_primary">
+                        <div class="omran_kpi omran_kpi_lg">
+                            <div class="omran_kpi_head">
+                                <i class="fa fa-line-chart"/>
+                                <span>Revenue this month</span>
+                            </div>
+                            <field name="revenue_month" widget="monetary" nolabel="1" readonly="1" class="omran_kpi_value"/>
+                            <div class="omran_kpi_sub">
+                                Today <field name="revenue_today" widget="monetary" nolabel="1" readonly="1"/>
+                            </div>
+                        </div>
+
+                        <div class="omran_kpi omran_kpi_warning">
+                            <div class="omran_kpi_head">
+                                <i class="fa fa-clock-o"/>
+                                <span>Outstanding</span>
+                            </div>
+                            <field name="outstanding_receivable" widget="monetary" nolabel="1" readonly="1" class="omran_kpi_value"/>
+                            <div class="omran_kpi_sub">
+                                <field name="invoices_overdue_count" nolabel="1" readonly="1"/> overdue invoices
+                            </div>
+                        </div>
+
+                        <div class="omran_kpi">
+                            <div class="omran_kpi_head">
+                                <i class="fa fa-bullseye"/>
+                                <span>Pipeline</span>
+                            </div>
+                            <field name="pipeline_value" widget="monetary" nolabel="1" readonly="1" class="omran_kpi_value"/>
+                            <div class="omran_kpi_sub">
+                                <field name="open_opportunities" nolabel="1" readonly="1"/> opportunities
+                            </div>
+                        </div>
+
+                        <div class="omran_kpi">
+                            <div class="omran_kpi_head">
+                                <i class="fa fa-shopping-cart"/>
+                                <span>Sales this month</span>
+                            </div>
+                            <field name="sales_month_value" widget="monetary" nolabel="1" readonly="1" class="omran_kpi_value"/>
+                            <div class="omran_kpi_sub">
+                                <field name="sales_open_count" nolabel="1" readonly="1"/> open orders
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- OPERATIONS ROW -->
+                    <div class="omran_section">
+                        <h3 class="omran_section_h">Operations</h3>
+                        <div class="omran_kpi_row omran_kpi_row_sm">
+                            <div class="omran_mini">
+                                <i class="fa fa-users omran_mini_icon"/>
+                                <div>
+                                    <field name="employee_count" nolabel="1" readonly="1" class="omran_mini_value"/>
+                                    <div class="omran_mini_label">Active employees</div>
+                                </div>
+                            </div>
+                            <div class="omran_mini">
+                                <i class="fa fa-plane omran_mini_icon"/>
+                                <div>
+                                    <field name="leaves_pending" nolabel="1" readonly="1" class="omran_mini_value"/>
+                                    <div class="omran_mini_label">Leaves pending</div>
+                                </div>
+                            </div>
+                            <div class="omran_mini">
+                                <i class="fa fa-tasks omran_mini_icon"/>
+                                <div>
+                                    <field name="active_projects" nolabel="1" readonly="1" class="omran_mini_value"/>
+                                    <div class="omran_mini_label">Active projects</div>
+                                </div>
+                            </div>
+                            <div class="omran_mini">
+                                <i class="fa fa-check-square-o omran_mini_icon"/>
+                                <div>
+                                    <field name="open_tasks" nolabel="1" readonly="1" class="omran_mini_value"/>
+                                    <div class="omran_mini_label">Open tasks</div>
+                                </div>
+                            </div>
+                            <div class="omran_mini">
+                                <i class="fa fa-cube omran_mini_icon"/>
+                                <div>
+                                    <field name="product_count" nolabel="1" readonly="1" class="omran_mini_value"/>
+                                    <div class="omran_mini_label">Products</div>
+                                </div>
+                            </div>
+                            <div class="omran_mini">
+                                <i class="fa fa-user-plus omran_mini_icon"/>
+                                <div>
+                                    <field name="customer_count" nolabel="1" readonly="1" class="omran_mini_value"/>
+                                    <div class="omran_mini_label">Customers</div>
+                                </div>
+                            </div>
+                            <div class="omran_mini">
+                                <i class="fa fa-truck omran_mini_icon"/>
+                                <div>
+                                    <field name="purchase_open_count" nolabel="1" readonly="1" class="omran_mini_value"/>
+                                    <div class="omran_mini_label">Open POs</div>
+                                </div>
+                            </div>
+                            <div class="omran_mini">
+                                <i class="fa fa-file-text-o omran_mini_icon"/>
+                                <div>
+                                    <field name="invoices_draft_count" nolabel="1" readonly="1" class="omran_mini_value"/>
+                                    <div class="omran_mini_label">Draft invoices</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PROGRESS STRIP: 3 visual bars -->
+                    <div class="omran_section">
+                        <h3 class="omran_section_h">Health</h3>
+                        <div class="omran_progress_row">
+                            <div class="omran_prog_card omran_prog_success_card">
+                                <div class="omran_prog_label">Paid this month</div>
+                                <field name="paid_ratio_pct" widget="progressbar" nolabel="1" readonly="1"/>
+                                <div class="omran_prog_note">Revenue vs total invoiced</div>
+                            </div>
+                            <div class="omran_prog_card omran_prog_primary_card">
+                                <div class="omran_prog_label">Monthly target</div>
+                                <field name="cash_in_target_pct" widget="progressbar" nolabel="1" readonly="1"/>
+                                <div class="omran_prog_note">Toward SAR 100,000 this month</div>
+                            </div>
+                            <div class="omran_prog_card omran_prog_accent_card">
+                                <div class="omran_prog_label">Pipeline conversion</div>
+                                <field name="pipeline_conversion_pct" widget="progressbar" nolabel="1" readonly="1"/>
+                                <div class="omran_prog_note">Closed sales vs pipeline</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TWO-COLUMN: Finance summary + Quick actions -->
+                    <div class="omran_two_col">
+                        <div class="omran_panel">
+                            <div class="omran_panel_head">
+                                <i class="fa fa-pie-chart"/>
+                                <h3>Finance snapshot</h3>
+                            </div>
+                            <div class="omran_panel_body">
+                                <div class="omran_panel_row">
+                                    <span class="omran_panel_label">Revenue this month</span>
+                                    <field name="revenue_month" widget="monetary" nolabel="1" readonly="1" class="omran_panel_value"/>
+                                </div>
+                                <div class="omran_panel_row">
+                                    <span class="omran_panel_label">Revenue today</span>
+                                    <field name="revenue_today" widget="monetary" nolabel="1" readonly="1" class="omran_panel_value"/>
+                                </div>
+                                <div class="omran_panel_row">
+                                    <span class="omran_panel_label">Outstanding receivables</span>
+                                    <field name="outstanding_receivable" widget="monetary" nolabel="1" readonly="1" class="omran_panel_value omran_panel_warn"/>
+                                </div>
+                                <div class="omran_panel_row">
+                                    <span class="omran_panel_label">Purchases this month</span>
+                                    <field name="purchase_month_value" widget="monetary" nolabel="1" readonly="1" class="omran_panel_value"/>
+                                </div>
+                                <div class="omran_panel_row omran_panel_row_total">
+                                    <span class="omran_panel_label">Pipeline forecast</span>
+                                    <field name="pipeline_value" widget="monetary" nolabel="1" readonly="1" class="omran_panel_value omran_panel_primary"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="omran_panel">
+                            <div class="omran_panel_head">
+                                <i class="fa fa-bolt"/>
+                                <h3>Quick actions</h3>
+                            </div>
+                            <div class="omran_panel_body omran_panel_actions">
+                                <button name="%(account.action_move_out_invoice_type)d" type="action" class="omran_action_btn omran_action_primary">
+                                    <i class="fa fa-file-text-o"/>
+                                    <div>
+                                        <div class="omran_action_title">New invoice</div>
+                                        <div class="omran_action_sub">Customer invoices</div>
+                                    </div>
+                                </button>
+                                <button name="%(sale.action_quotations_with_onboarding)d" type="action" class="omran_action_btn">
+                                    <i class="fa fa-shopping-cart"/>
+                                    <div>
+                                        <div class="omran_action_title">New quote</div>
+                                        <div class="omran_action_sub">Sales orders</div>
+                                    </div>
+                                </button>
+                                <button name="%(crm.crm_lead_all_leads)d" type="action" class="omran_action_btn">
+                                    <i class="fa fa-bullseye"/>
+                                    <div>
+                                        <div class="omran_action_title">CRM pipeline</div>
+                                        <div class="omran_action_sub">Leads &amp; opportunities</div>
+                                    </div>
+                                </button>
+                                <button name="%(hr.open_view_employee_list_my)d" type="action" class="omran_action_btn">
+                                    <i class="fa fa-users"/>
+                                    <div>
+                                        <div class="omran_action_title">Employees</div>
+                                        <div class="omran_action_sub">HR directory</div>
+                                    </div>
+                                </button>
+                                <button name="%(project.open_view_project_all)d" type="action" class="omran_action_btn">
+                                    <i class="fa fa-tasks"/>
+                                    <div>
+                                        <div class="omran_action_title">Projects</div>
+                                        <div class="omran_action_sub">Active work</div>
+                                    </div>
+                                </button>
+                                <button name="%(purchase.purchase_rfq)d" type="action" class="omran_action_btn">
+                                    <i class="fa fa-truck"/>
+                                    <div>
+                                        <div class="omran_action_title">Purchases</div>
+                                        <div class="omran_action_sub">Orders &amp; RFQs</div>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <field name="currency_id" invisible="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_omran_dashboard" model="ir.actions.server">
+        <field name="name">OCIT Home</field>
+        <field name="model_id" ref="model_omran_dashboard"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open_dashboard()</field>
+    </record>
+
+    <menuitem id="menu_omran_dashboard_root"
+              name="Home"
+              sequence="0"
+              action="action_omran_dashboard"
+              web_icon="omran_dashboard,static/description/icon.png"/>
+</odoo>

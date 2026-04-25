@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!--
+            Odoo base already provides res.currency with major currencies.
+            We only add exchange rates here for demonstration.
+            The base currency is configured in Settings > General Settings.
+        -->
+    </data>
+</odoo>

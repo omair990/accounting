@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Balance Sheet Report Template -->
+    <template id="report_balance_sheet_document">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2>Balance Sheet</h2>
+                    <p>
+                        <strong>As of:</strong> <span t-esc="data.get('date_to')"/>
+                    </p>
+
+                    <!-- Assets -->
+                    <h4>Assets</h4>
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Account</th>
+                                <th class="text-end">Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs['asset_lines']" t-as="line">
+                                <tr>
+                                    <td t-esc="line['account_code']"/>
+                                    <td t-esc="line['account_name']"/>
+                                    <td class="text-end" t-esc="'%.2f' % line['balance']"/>
+                                </tr>
+                            </t>
+                        </tbody>
+                        <tfoot>
+                            <tr class="fw-bold">
+                                <td colspan="2">Total Assets</td>
+                                <td class="text-end" t-esc="'%.2f' % docs['total_assets']"/>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <!-- Liabilities -->
+                    <h4>Liabilities</h4>
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Account</th>
+                                <th class="text-end">Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs['liability_lines']" t-as="line">
+                                <tr>
+                                    <td t-esc="line['account_code']"/>
+                                    <td t-esc="line['account_name']"/>
+                                    <td class="text-end" t-esc="'%.2f' % abs(line['balance'])"/>
+                                </tr>
+                            </t>
+                        </tbody>
+                        <tfoot>
+                            <tr class="fw-bold">
+                                <td colspan="2">Total Liabilities</td>
+                                <td class="text-end" t-esc="'%.2f' % docs['total_liabilities']"/>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <!-- Equity -->
+                    <h4>Equity</h4>
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Account</th>
+                                <th class="text-end">Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs['equity_lines']" t-as="line">
+                                <tr>
+                                    <td t-esc="line['account_code']"/>
+                                    <td t-esc="line['account_name']"/>
+                                    <td class="text-end" t-esc="'%.2f' % abs(line['balance'])"/>
+                                </tr>
+                            </t>
+                        </tbody>
+                        <tfoot>
+                            <tr class="fw-bold">
+                                <td colspan="2">Total Equity</td>
+                                <td class="text-end" t-esc="'%.2f' % docs['total_equity']"/>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <!-- Summary -->
+                    <table class="table table-bordered mt-3">
+                        <tr class="fw-bold">
+                            <td>Total Liabilities + Equity</td>
+                            <td class="text-end" t-esc="'%.2f' % (docs['total_liabilities'] + docs['total_equity'])"/>
+                        </tr>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_balance_sheet" model="ir.actions.report">
+        <field name="name">Balance Sheet</field>
+        <field name="model">account.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">custom_accounting.report_balance_sheet_document</field>
+        <field name="report_file">custom_accounting.report_balance_sheet_document</field>
+    </record>
+</odoo>

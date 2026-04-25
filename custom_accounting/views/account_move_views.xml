@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Journal Entry: Tree View -->
+    <record id="view_account_move_tree" model="ir.ui.view">
+        <field name="name">account.move.tree</field>
+        <field name="model">account.move</field>
+        <field name="arch" type="xml">
+            <tree string="Journal Entries"
+                  decoration-info="state == 'draft'"
+                  decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="journal_id"/>
+                <field name="partner_id" optional="show"/>
+                <field name="ref" optional="show"/>
+                <field name="amount_total" sum="Total"/>
+                <field name="state" widget="badge"
+                    decoration-success="state == 'posted'"
+                    decoration-info="state == 'draft'"
+                    decoration-danger="state == 'cancelled'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Journal Entry: Form View -->
+    <record id="view_account_move_form" model="ir.ui.view">
+        <field name="name">account.move.form</field>
+        <field name="model">account.move</field>
+        <field name="arch" type="xml">
+            <form string="Journal Entry">
+                <header>
+                    <button name="action_post" string="Post" type="object"
+                        class="oe_highlight"
+                        invisible="state != 'draft'"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                        invisible="state != 'posted'"
+                        confirm="Are you sure you want to cancel this entry?"/>
+                    <button name="action_draft" string="Reset to Draft" type="object"
+                        invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="draft,posted"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <span class="o_form_label">Journal Entry</span>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <field name="company_id" invisible="1"/>
+                    <group>
+                        <group>
+                            <field name="journal_id"/>
+                            <field name="date"/>
+                            <field name="ref"/>
+                        </group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Journal Items">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="company_id" column_invisible="1"/>
+                                    <field name="account_id"/>
+                                    <field name="partner_id" optional="show"/>
+                                    <field name="name"/>
+                                    <field name="debit" sum="Total Debit"/>
+                                    <field name="credit" sum="Total Credit"/>
+                                    <field name="tax_ids" widget="many2many_tags" optional="show"/>
+                                    <field name="date_maturity" optional="hide"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Journal Entry: Search View -->
+    <record id="view_account_move_search" model="ir.ui.view">
+        <field name="name">account.move.search</field>
+        <field name="model">account.move</field>
+        <field name="arch" type="xml">
+            <search string="Search Journal Entries">
+                <field name="name"/>
+                <field name="ref"/>
+                <field name="partner_id"/>
+                <field name="journal_id"/>
+                <filter name="filter_draft" string="Draft"
+                    domain="[('state', '=', 'draft')]"/>
+                <filter name="filter_posted" string="Posted"
+                    domain="[('state', '=', 'posted')]"/>
+                <filter name="filter_entries" string="Journal Entries"
+                    domain="[('move_type', '=', 'entry')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_journal" string="Journal"
+                        context="{'group_by': 'journal_id'}"/>
+                    <filter name="group_date" string="Date"
+                        context="{'group_by': 'date:month'}"/>
+                    <filter name="group_partner" string="Partner"
+                        context="{'group_by': 'partner_id'}"/>
+                    <filter name="group_state" string="Status"
+                        context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action: Journal Entries -->
+    <record id="action_account_move_journal_entries" model="ir.actions.act_window">
+        <field name="name">Journal Entries</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('move_type', '=', 'entry')]</field>
+        <field name="context">{'default_move_type': 'entry'}</field>
+        <field name="search_view_id" ref="view_account_move_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a journal entry
+            </p>
+        </field>
+    </record>
+</odoo>

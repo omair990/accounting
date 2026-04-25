@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Report Wizard: Form View -->
+    <record id="view_account_report_wizard_form" model="ir.ui.view">
+        <field name="name">account.report.wizard.form</field>
+        <field name="model">account.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Financial Report">
+                <group>
+                    <group string="Period">
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="target_move"/>
+                    </group>
+                    <group string="Filters">
+                        <field name="account_ids" widget="many2many_tags"/>
+                        <field name="partner_ids" widget="many2many_tags"/>
+                        <field name="journal_ids" widget="many2many_tags"/>
+                    </group>
+                </group>
+                <field name="report_type" invisible="1"/>
+                <footer>
+                    <button name="action_generate_report" string="Generate Report"
+                        type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Actions for each report type -->
+    <record id="action_report_general_ledger_wizard" model="ir.actions.act_window">
+        <field name="name">General Ledger</field>
+        <field name="res_model">account.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_report_type': 'general_ledger'}</field>
+    </record>
+
+    <record id="action_report_trial_balance_wizard" model="ir.actions.act_window">
+        <field name="name">Trial Balance</field>
+        <field name="res_model">account.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_report_type': 'trial_balance'}</field>
+    </record>
+
+    <record id="action_report_profit_loss_wizard" model="ir.actions.act_window">
+        <field name="name">Profit and Loss</field>
+        <field name="res_model">account.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_report_type': 'profit_loss'}</field>
+    </record>
+
+    <record id="action_report_balance_sheet_wizard" model="ir.actions.act_window">
+        <field name="name">Balance Sheet</field>
+        <field name="res_model">account.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_report_type': 'balance_sheet'}</field>
+    </record>
+</odoo>

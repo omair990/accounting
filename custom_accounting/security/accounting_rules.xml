@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Record Rules: company-level data isolation -->
+
+    <!-- Users can only see records from their own company -->
+    <record id="rule_account_account_company" model="ir.rule">
+        <field name="name">Account: multi-company</field>
+        <field name="model_id" ref="model_account_account"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_account_journal_company" model="ir.rule">
+        <field name="name">Journal: multi-company</field>
+        <field name="model_id" ref="model_account_journal"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_account_move_company" model="ir.rule">
+        <field name="name">Journal Entry: multi-company</field>
+        <field name="model_id" ref="model_account_move"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_account_move_line_company" model="ir.rule">
+        <field name="name">Journal Item: multi-company</field>
+        <field name="model_id" ref="model_account_move_line"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_account_payment_company" model="ir.rule">
+        <field name="name">Payment: multi-company</field>
+        <field name="model_id" ref="model_account_payment"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="rule_account_tax_company" model="ir.rule">
+        <field name="name">Tax: multi-company</field>
+        <field name="model_id" ref="model_account_tax"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Accountants cannot delete posted entries -->
+    <record id="rule_account_move_no_delete_posted" model="ir.rule">
+        <field name="name">Accountant: cannot delete posted entries</field>
+        <field name="model_id" ref="model_account_move"/>
+        <field name="groups" eval="[(4, ref('group_account_accountant'))]"/>
+        <field name="domain_force">[('state', '!=', 'posted')]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+</odoo>

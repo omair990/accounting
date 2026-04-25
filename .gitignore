@@ -1,0 +1,49 @@
+# ---- macOS / OS junk ----
+.DS_Store
+Thumbs.db
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+.pytest_cache/
+
+# ---- Virtual envs ----
+.venv/
+venv/
+env/
+
+# ---- IDE / editor ----
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ---- Logs ----
+*.log
+odoo.log
+"odoo 2.log"
+
+# ---- Odoo runtime / data ----
+.odoo_data/
+filestore/
+sessions/
+
+# ---- Odoo upstream + OCA vendor trees ----
+# These are large vendor checkouts; clone separately, do not commit.
+odoo/
+oca/
+
+# ---- Local config (contains admin_passwd / DB creds) ----
+odoo.conf
+
+# ---- PyCharm boilerplate ----
+main.py
+
+# ---- Build artifacts ----
+*.pot~
+node_modules/
+dist/
+build/

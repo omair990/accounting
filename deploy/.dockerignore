@@ -1,0 +1,12 @@
+.venv
+.git
+.idea
+.odoo_data
+odoo/
+oca/
+odoo.log
+*.log
+*.pyc
+__pycache__
+.DS_Store
+deploy/nginx/certs

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Profit and Loss Report Template -->
+    <template id="report_profit_loss_document">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2>Profit and Loss Statement</h2>
+                    <p>
+                        <strong>Period:</strong>
+                        <span t-esc="data.get('date_from')"/> to <span t-esc="data.get('date_to')"/>
+                    </p>
+
+                    <!-- Income Section -->
+                    <h4>Income</h4>
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Account</th>
+                                <th class="text-end">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs['income_lines']" t-as="line">
+                                <tr>
+                                    <td t-esc="line['account_code']"/>
+                                    <td t-esc="line['account_name']"/>
+                                    <td class="text-end" t-esc="'%.2f' % abs(line['balance'])"/>
+                                </tr>
+                            </t>
+                        </tbody>
+                        <tfoot>
+                            <tr class="fw-bold">
+                                <td colspan="2">Total Income</td>
+                                <td class="text-end" t-esc="'%.2f' % docs['total_income']"/>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <!-- Expense Section -->
+                    <h4>Expenses</h4>
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Account</th>
+                                <th class="text-end">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs['expense_lines']" t-as="line">
+                                <tr>
+                                    <td t-esc="line['account_code']"/>
+                                    <td t-esc="line['account_name']"/>
+                                    <td class="text-end" t-esc="'%.2f' % line['balance']"/>
+                                </tr>
+                            </t>
+                        </tbody>
+                        <tfoot>
+                            <tr class="fw-bold">
+                                <td colspan="2">Total Expenses</td>
+                                <td class="text-end" t-esc="'%.2f' % docs['total_expense']"/>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <!-- Net Profit -->
+                    <table class="table table-bordered mt-3">
+                        <tr class="fw-bold table-success" t-if="docs['net_profit'] >= 0">
+                            <td>Net Profit</td>
+                            <td class="text-end" t-esc="'%.2f' % docs['net_profit']"/>
+                        </tr>
+                        <tr class="fw-bold table-danger" t-if="docs['net_profit'] &lt; 0">
+                            <td>Net Loss</td>
+                            <td class="text-end" t-esc="'%.2f' % abs(docs['net_profit'])"/>
+                        </tr>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_profit_loss" model="ir.actions.report">
+        <field name="name">Profit and Loss</field>
+        <field name="model">account.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">custom_accounting.report_profit_loss_document</field>
+        <field name="report_file">custom_accounting.report_profit_loss_document</field>
+    </record>
+</odoo>

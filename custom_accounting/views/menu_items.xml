@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===================== ROOT MENU ===================== -->
+    <menuitem id="menu_accounting_root"
+        name="Accounting"
+        web_icon="custom_accounting,static/description/icon.png"
+        sequence="30"/>
+
+    <!-- ===================== DASHBOARD ===================== -->
+    <menuitem id="menu_accounting_dashboard"
+        name="Dashboard"
+        parent="menu_accounting_root"
+        action="action_account_dashboard"
+        sequence="1"/>
+
+    <!-- ===================== CUSTOMERS ===================== -->
+    <menuitem id="menu_accounting_customers"
+        name="Customers"
+        parent="menu_accounting_root"
+        sequence="10"/>
+
+    <menuitem id="menu_accounting_customers_invoices"
+        name="Invoices"
+        parent="menu_accounting_customers"
+        action="action_account_invoice_out"
+        sequence="10"/>
+
+    <menuitem id="menu_accounting_customers_credit_notes"
+        name="Credit Notes"
+        parent="menu_accounting_customers"
+        action="action_account_credit_note_out"
+        sequence="20"/>
+
+    <menuitem id="menu_accounting_customers_payments"
+        name="Payments"
+        parent="menu_accounting_customers"
+        action="action_account_payment_inbound"
+        sequence="30"/>
+
+    <menuitem id="menu_accounting_customers_list"
+        name="Customers"
+        parent="menu_accounting_customers"
+        action="action_customers"
+        sequence="40"/>
+
+    <!-- ===================== VENDORS ===================== -->
+    <menuitem id="menu_accounting_vendors"
+        name="Vendors"
+        parent="menu_accounting_root"
+        sequence="20"/>
+
+    <menuitem id="menu_accounting_vendors_bills"
+        name="Bills"
+        parent="menu_accounting_vendors"
+        action="action_account_invoice_in"
+        sequence="10"/>
+
+    <menuitem id="menu_accounting_vendors_credit_notes"
+        name="Credit Notes"
+        parent="menu_accounting_vendors"
+        action="action_account_credit_note_in"
+        sequence="20"/>
+
+    <menuitem id="menu_accounting_vendors_payments"
+        name="Payments"
+        parent="menu_accounting_vendors"
+        action="action_account_payment_outbound"
+        sequence="30"/>
+
+    <menuitem id="menu_accounting_vendors_list"
+        name="Vendors"
+        parent="menu_accounting_vendors"
+        action="action_vendors"
+        sequence="40"/>
+
+    <!-- ===================== ACCOUNTING ===================== -->
+    <menuitem id="menu_accounting_entries"
+        name="Accounting"
+        parent="menu_accounting_root"
+        sequence="30"/>
+
+    <menuitem id="menu_accounting_journal_entries"
+        name="Journal Entries"
+        parent="menu_accounting_entries"
+        action="action_account_move_journal_entries"
+        sequence="10"/>
+
+    <menuitem id="menu_accounting_reconciliation"
+        name="Reconciliation"
+        parent="menu_accounting_entries"
+        action="action_account_unreconciled"
+        sequence="20"/>
+
+    <!-- ===================== REPORTING ===================== -->
+    <menuitem id="menu_accounting_reports"
+        name="Reporting"
+        parent="menu_accounting_root"
+        sequence="40"/>
+
+    <menuitem id="menu_report_general_ledger"
+        name="General Ledger"
+        parent="menu_accounting_reports"
+        action="action_report_general_ledger_wizard"
+        sequence="10"/>
+
+    <menuitem id="menu_report_trial_balance"
+        name="Trial Balance"
+        parent="menu_accounting_reports"
+        action="action_report_trial_balance_wizard"
+        sequence="20"/>
+
+    <menuitem id="menu_report_profit_loss"
+        name="Profit and Loss"
+        parent="menu_accounting_reports"
+        action="action_report_profit_loss_wizard"
+        sequence="30"/>
+
+    <menuitem id="menu_report_balance_sheet"
+        name="Balance Sheet"
+        parent="menu_accounting_reports"
+        action="action_report_balance_sheet_wizard"
+        sequence="40"/>
+
+    <!-- ===================== CONFIGURATION ===================== -->
+    <menuitem id="menu_accounting_config"
+        name="Configuration"
+        parent="menu_accounting_root"
+        groups="group_account_manager"
+        sequence="90"/>
+
+    <menuitem id="menu_config_chart_of_accounts"
+        name="Chart of Accounts"
+        parent="menu_accounting_config"
+        action="action_account_account"
+        sequence="10"/>
+
+    <menuitem id="menu_config_journals"
+        name="Journals"
+        parent="menu_accounting_config"
+        action="action_account_journal"
+        sequence="20"/>
+
+    <menuitem id="menu_config_taxes"
+        name="Taxes"
+        parent="menu_accounting_config"
+        action="action_account_tax"
+        sequence="30"/>
+</odoo>

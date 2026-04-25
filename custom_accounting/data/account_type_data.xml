@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Asset Types -->
+        <record id="account_type_receivable" model="account.account.type">
+            <field name="name">Receivable</field>
+            <field name="code">receivable</field>
+            <field name="internal_group">asset</field>
+            <field name="type">receivable</field>
+            <field name="sequence">1</field>
+        </record>
+        <record id="account_type_bank" model="account.account.type">
+            <field name="name">Bank and Cash</field>
+            <field name="code">bank_cash</field>
+            <field name="internal_group">asset</field>
+            <field name="type">bank</field>
+            <field name="sequence">2</field>
+        </record>
+        <record id="account_type_current_assets" model="account.account.type">
+            <field name="name">Current Assets</field>
+            <field name="code">current_assets</field>
+            <field name="internal_group">asset</field>
+            <field name="type">current_assets</field>
+            <field name="sequence">3</field>
+        </record>
+        <record id="account_type_non_current_assets" model="account.account.type">
+            <field name="name">Non-current Assets</field>
+            <field name="code">non_current_assets</field>
+            <field name="internal_group">asset</field>
+            <field name="type">non_current_assets</field>
+            <field name="sequence">4</field>
+        </record>
+        <record id="account_type_prepayments" model="account.account.type">
+            <field name="name">Prepayments</field>
+            <field name="code">prepayments</field>
+            <field name="internal_group">asset</field>
+            <field name="type">prepayments</field>
+            <field name="sequence">5</field>
+        </record>
+
+        <!-- Liability Types -->
+        <record id="account_type_payable" model="account.account.type">
+            <field name="name">Payable</field>
+            <field name="code">payable</field>
+            <field name="internal_group">liability</field>
+            <field name="type">payable</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="account_type_current_liabilities" model="account.account.type">
+            <field name="name">Current Liabilities</field>
+            <field name="code">current_liabilities</field>
+            <field name="internal_group">liability</field>
+            <field name="type">current_liabilities</field>
+            <field name="sequence">11</field>
+        </record>
+        <record id="account_type_non_current_liabilities" model="account.account.type">
+            <field name="name">Non-current Liabilities</field>
+            <field name="code">non_current_liabilities</field>
+            <field name="internal_group">liability</field>
+            <field name="type">non_current_liabilities</field>
+            <field name="sequence">12</field>
+        </record>
+
+        <!-- Equity -->
+        <record id="account_type_equity" model="account.account.type">
+            <field name="name">Equity</field>
+            <field name="code">equity</field>
+            <field name="internal_group">equity</field>
+            <field name="type">equity</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <!-- Income Types -->
+        <record id="account_type_income" model="account.account.type">
+            <field name="name">Income</field>
+            <field name="code">income</field>
+            <field name="internal_group">income</field>
+            <field name="type">income</field>
+            <field name="sequence">30</field>
+        </record>
+        <record id="account_type_other_income" model="account.account.type">
+            <field name="name">Other Income</field>
+            <field name="code">other_income</field>
+            <field name="internal_group">income</field>
+            <field name="type">other_income</field>
+            <field name="sequence">31</field>
+        </record>
+
+        <!-- Expense Types -->
+        <record id="account_type_expense" model="account.account.type">
+            <field name="name">Expenses</field>
+            <field name="code">expense</field>
+            <field name="internal_group">expense</field>
+            <field name="type">expense</field>
+            <field name="sequence">40</field>
+        </record>
+        <record id="account_type_cost_of_revenue" model="account.account.type">
+            <field name="name">Cost of Revenue</field>
+            <field name="code">cost_of_revenue</field>
+            <field name="internal_group">expense</field>
+            <field name="type">cost_of_revenue</field>
+            <field name="sequence">41</field>
+        </record>
+        <record id="account_type_depreciation" model="account.account.type">
+            <field name="name">Depreciation</field>
+            <field name="code">depreciation</field>
+            <field name="internal_group">expense</field>
+            <field name="type">depreciation</field>
+            <field name="sequence">42</field>
+        </record>
+    </data>
+</odoo>

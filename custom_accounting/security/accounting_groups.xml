@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Security Groups for Accounting Module -->
+
+    <record id="module_category_accounting" model="ir.module.category">
+        <field name="name">Accounting</field>
+        <field name="description">Access rights for accounting features</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <!-- Read-Only User: can view all accounting data but cannot modify -->
+    <record id="group_account_readonly" model="res.groups">
+        <field name="name">Accounting: Read Only</field>
+        <field name="category_id" ref="module_category_accounting"/>
+        <field name="comment">Can view all accounting records and reports. Cannot create, edit, or delete.</field>
+    </record>
+
+    <!-- Accountant: can create/edit entries, post, register payments -->
+    <record id="group_account_accountant" model="res.groups">
+        <field name="name">Accounting: Accountant</field>
+        <field name="category_id" ref="module_category_accounting"/>
+        <field name="implied_ids" eval="[(4, ref('group_account_readonly'))]"/>
+        <field name="comment">Can create, edit, and post journal entries, invoices, and payments. Cannot configure accounts or manage security.</field>
+    </record>
+
+    <!-- Manager: full access including configuration and cancellation -->
+    <record id="group_account_manager" model="res.groups">
+        <field name="name">Accounting: Manager</field>
+        <field name="category_id" ref="module_category_accounting"/>
+        <field name="implied_ids" eval="[(4, ref('group_account_accountant'))]"/>
+        <field name="comment">Full access to all accounting features including configuration, cancellation, lock dates, and user management.</field>
+    </record>
+</odoo>

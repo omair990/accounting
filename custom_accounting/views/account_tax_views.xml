@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tax: Tree View -->
+    <record id="view_account_tax_tree" model="ir.ui.view">
+        <field name="name">account.tax.tree</field>
+        <field name="model">account.tax</field>
+        <field name="arch" type="xml">
+            <tree string="Taxes">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="type_tax_use"/>
+                <field name="amount_type"/>
+                <field name="amount"/>
+                <field name="account_id"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Tax: Form View -->
+    <record id="view_account_tax_form" model="ir.ui.view">
+        <field name="name">account.tax.form</field>
+        <field name="model">account.tax</field>
+        <field name="arch" type="xml">
+            <form string="Tax">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. VAT 15%"/></h1>
+                    </div>
+                    <group>
+                        <group string="Definition">
+                            <field name="type_tax_use"/>
+                            <field name="amount_type"/>
+                            <field name="amount"/>
+                            <field name="price_include"/>
+                            <field name="include_base_amount"/>
+                        </group>
+                        <group string="Accounting">
+                            <field name="account_id"/>
+                            <field name="refund_account_id"/>
+                            <field name="description"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_account_tax" model="ir.actions.act_window">
+        <field name="name">Taxes</field>
+        <field name="res_model">account.tax</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new tax
+            </p>
+        </field>
+    </record>
+</odoo>

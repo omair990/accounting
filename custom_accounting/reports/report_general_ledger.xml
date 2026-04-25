@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- General Ledger Report Template -->
+    <template id="report_general_ledger_document">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2>General Ledger</h2>
+                    <p>
+                        <strong>Period:</strong>
+                        <span t-esc="data.get('date_from')"/> to <span t-esc="data.get('date_to')"/>
+                    </p>
+                    <t t-foreach="docs" t-as="account">
+                        <h4>
+                            <span t-esc="account['account_code']"/> -
+                            <span t-esc="account['account_name']"/>
+                        </h4>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Entry</th>
+                                    <th>Partner</th>
+                                    <th>Label</th>
+                                    <th class="text-end">Debit</th>
+                                    <th class="text-end">Credit</th>
+                                    <th class="text-end">Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="account['lines']" t-as="line">
+                                    <tr>
+                                        <td t-esc="line['date']"/>
+                                        <td t-esc="line['entry_name']"/>
+                                        <td t-esc="line['partner']"/>
+                                        <td t-esc="line['label']"/>
+                                        <td class="text-end" t-esc="'%.2f' % line['debit']"/>
+                                        <td class="text-end" t-esc="'%.2f' % line['credit']"/>
+                                        <td class="text-end" t-esc="'%.2f' % line['balance']"/>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <tr class="fw-bold">
+                                    <td colspan="4">Total</td>
+                                    <td class="text-end" t-esc="'%.2f' % account['debit']"/>
+                                    <td class="text-end" t-esc="'%.2f' % account['credit']"/>
+                                    <td class="text-end" t-esc="'%.2f' % account['balance']"/>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_general_ledger" model="ir.actions.report">
+        <field name="name">General Ledger</field>
+        <field name="model">account.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">custom_accounting.report_general_ledger_document</field>
+        <field name="report_file">custom_accounting.report_general_ledger_document</field>
+    </record>
+</odoo>

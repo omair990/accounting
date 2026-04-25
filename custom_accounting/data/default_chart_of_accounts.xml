@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- ============ ASSETS ============ -->
+        <record id="account_1100" model="account.account">
+            <field name="code">1100</field>
+            <field name="name">Accounts Receivable</field>
+            <field name="account_type_id" ref="account_type_receivable"/>
+            <field name="reconcile" eval="True"/>
+        </record>
+        <record id="account_1200" model="account.account">
+            <field name="code">1200</field>
+            <field name="name">Bank Account</field>
+            <field name="account_type_id" ref="account_type_bank"/>
+        </record>
+        <record id="account_1210" model="account.account">
+            <field name="code">1210</field>
+            <field name="name">Cash</field>
+            <field name="account_type_id" ref="account_type_bank"/>
+        </record>
+        <record id="account_1300" model="account.account">
+            <field name="code">1300</field>
+            <field name="name">Inventory</field>
+            <field name="account_type_id" ref="account_type_current_assets"/>
+        </record>
+        <record id="account_1400" model="account.account">
+            <field name="code">1400</field>
+            <field name="name">Prepaid Expenses</field>
+            <field name="account_type_id" ref="account_type_prepayments"/>
+        </record>
+        <record id="account_1500" model="account.account">
+            <field name="code">1500</field>
+            <field name="name">Fixed Assets</field>
+            <field name="account_type_id" ref="account_type_non_current_assets"/>
+        </record>
+        <record id="account_1510" model="account.account">
+            <field name="code">1510</field>
+            <field name="name">Accumulated Depreciation</field>
+            <field name="account_type_id" ref="account_type_non_current_assets"/>
+        </record>
+
+        <!-- Outstanding payment accounts -->
+        <record id="account_1150" model="account.account">
+            <field name="code">1150</field>
+            <field name="name">Outstanding Receipts</field>
+            <field name="account_type_id" ref="account_type_current_assets"/>
+            <field name="reconcile" eval="True"/>
+        </record>
+        <record id="account_1160" model="account.account">
+            <field name="code">1160</field>
+            <field name="name">Outstanding Payments</field>
+            <field name="account_type_id" ref="account_type_current_assets"/>
+            <field name="reconcile" eval="True"/>
+        </record>
+
+        <!-- ============ LIABILITIES ============ -->
+        <record id="account_2100" model="account.account">
+            <field name="code">2100</field>
+            <field name="name">Accounts Payable</field>
+            <field name="account_type_id" ref="account_type_payable"/>
+            <field name="reconcile" eval="True"/>
+        </record>
+        <record id="account_2200" model="account.account">
+            <field name="code">2200</field>
+            <field name="name">Tax Payable</field>
+            <field name="account_type_id" ref="account_type_current_liabilities"/>
+        </record>
+        <record id="account_2210" model="account.account">
+            <field name="code">2210</field>
+            <field name="name">Tax Receivable (Input Tax)</field>
+            <field name="account_type_id" ref="account_type_current_assets"/>
+        </record>
+        <record id="account_2300" model="account.account">
+            <field name="code">2300</field>
+            <field name="name">Accrued Expenses</field>
+            <field name="account_type_id" ref="account_type_current_liabilities"/>
+        </record>
+        <record id="account_2500" model="account.account">
+            <field name="code">2500</field>
+            <field name="name">Long-term Loans</field>
+            <field name="account_type_id" ref="account_type_non_current_liabilities"/>
+        </record>
+
+        <!-- ============ EQUITY ============ -->
+        <record id="account_3000" model="account.account">
+            <field name="code">3000</field>
+            <field name="name">Share Capital</field>
+            <field name="account_type_id" ref="account_type_equity"/>
+        </record>
+        <record id="account_3100" model="account.account">
+            <field name="code">3100</field>
+            <field name="name">Retained Earnings</field>
+            <field name="account_type_id" ref="account_type_equity"/>
+        </record>
+
+        <!-- ============ INCOME ============ -->
+        <record id="account_4000" model="account.account">
+            <field name="code">4000</field>
+            <field name="name">Sales Revenue</field>
+            <field name="account_type_id" ref="account_type_income"/>
+        </record>
+        <record id="account_4100" model="account.account">
+            <field name="code">4100</field>
+            <field name="name">Service Revenue</field>
+            <field name="account_type_id" ref="account_type_income"/>
+        </record>
+        <record id="account_4200" model="account.account">
+            <field name="code">4200</field>
+            <field name="name">Interest Income</field>
+            <field name="account_type_id" ref="account_type_other_income"/>
+        </record>
+        <record id="account_4300" model="account.account">
+            <field name="code">4300</field>
+            <field name="name">Other Income</field>
+            <field name="account_type_id" ref="account_type_other_income"/>
+        </record>
+
+        <!-- ============ EXPENSES ============ -->
+        <record id="account_5000" model="account.account">
+            <field name="code">5000</field>
+            <field name="name">Cost of Goods Sold</field>
+            <field name="account_type_id" ref="account_type_cost_of_revenue"/>
+        </record>
+        <record id="account_6000" model="account.account">
+            <field name="code">6000</field>
+            <field name="name">Salaries and Wages</field>
+            <field name="account_type_id" ref="account_type_expense"/>
+        </record>
+        <record id="account_6100" model="account.account">
+            <field name="code">6100</field>
+            <field name="name">Rent Expense</field>
+            <field name="account_type_id" ref="account_type_expense"/>
+        </record>
+        <record id="account_6200" model="account.account">
+            <field name="code">6200</field>
+            <field name="name">Utilities Expense</field>
+            <field name="account_type_id" ref="account_type_expense"/>
+        </record>
+        <record id="account_6300" model="account.account">
+            <field name="code">6300</field>
+            <field name="name">Office Supplies</field>
+            <field name="account_type_id" ref="account_type_expense"/>
+        </record>
+        <record id="account_6400" model="account.account">
+            <field name="code">6400</field>
+            <field name="name">Marketing Expense</field>
+            <field name="account_type_id" ref="account_type_expense"/>
+        </record>
+        <record id="account_6500" model="account.account">
+            <field name="code">6500</field>
+            <field name="name">Insurance Expense</field>
+            <field name="account_type_id" ref="account_type_expense"/>
+        </record>
+        <record id="account_6600" model="account.account">
+            <field name="code">6600</field>
+            <field name="name">Depreciation Expense</field>
+            <field name="account_type_id" ref="account_type_depreciation"/>
+        </record>
+        <record id="account_6700" model="account.account">
+            <field name="code">6700</field>
+            <field name="name">Professional Fees</field>
+            <field name="account_type_id" ref="account_type_expense"/>
+        </record>
+        <record id="account_6800" model="account.account">
+            <field name="code">6800</field>
+            <field name="name">Miscellaneous Expense</field>
+            <field name="account_type_id" ref="account_type_expense"/>
+        </record>
+
+        <!-- Exchange difference account -->
+        <record id="account_7000" model="account.account">
+            <field name="code">7000</field>
+            <field name="name">Exchange Rate Gains/Losses</field>
+            <field name="account_type_id" ref="account_type_other_income"/>
+        </record>
+    </data>
+</odoo>

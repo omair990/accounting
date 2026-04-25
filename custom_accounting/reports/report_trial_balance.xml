@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Trial Balance Report Template -->
+    <template id="report_trial_balance_document">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2>Trial Balance</h2>
+                    <p>
+                        <strong>Period:</strong>
+                        <span t-esc="data.get('date_from')"/> to <span t-esc="data.get('date_to')"/>
+                    </p>
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Account</th>
+                                <th>Type</th>
+                                <th class="text-end">Debit</th>
+                                <th class="text-end">Credit</th>
+                                <th class="text-end">Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs['lines']" t-as="line">
+                                <tr>
+                                    <td t-esc="line['account_code']"/>
+                                    <td t-esc="line['account_name']"/>
+                                    <td t-esc="line['account_type']"/>
+                                    <td class="text-end" t-esc="'%.2f' % line['debit']"/>
+                                    <td class="text-end" t-esc="'%.2f' % line['credit']"/>
+                                    <td class="text-end" t-esc="'%.2f' % line['balance']"/>
+                                </tr>
+                            </t>
+                        </tbody>
+                        <tfoot>
+                            <tr class="fw-bold">
+                                <td colspan="3">Total</td>
+                                <td class="text-end" t-esc="'%.2f' % docs['total_debit']"/>
+                                <td class="text-end" t-esc="'%.2f' % docs['total_credit']"/>
+                                <td class="text-end" t-esc="'%.2f' % (docs['total_debit'] - docs['total_credit'])"/>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_trial_balance" model="ir.actions.report">
+        <field name="name">Trial Balance</field>
+        <field name="model">account.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">custom_accounting.report_trial_balance_document</field>
+        <field name="report_file">custom_accounting.report_trial_balance_document</field>
+    </record>
+</odoo>

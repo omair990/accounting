@@ -1,0 +1,257 @@
+/* ============================================================
+   LEGIBILITY PASS — overrides that prioritize readability over flair
+   Loaded LAST so it wins cascading battles
+   ============================================================ */
+
+/* Base: ensure comfortable reading size everywhere */
+.o_web_client,
+.o_web_client * {
+    font-size: 0.9375rem;  /* 15px default for body text */
+}
+.o_web_client {
+    color: #{$omran-text};
+}
+
+/* Disable global letter-spacing compression — hurts Arabic + small text */
+body, .o_web_client {
+    letter-spacing: 0 !important;
+}
+
+/* --- LIST VIEW: tighter but readable --- */
+.o_list_view td,
+.o_list_view th {
+    font-size: 0.9375rem !important;     /* 15px instead of compressed 13px */
+    padding: 0.625rem 0.75rem !important;
+}
+.o_list_view thead th {
+    font-size: 0.8125rem !important;     /* 13px */
+    text-transform: none !important;      /* no uppercase — easier to scan */
+    letter-spacing: 0 !important;
+    color: #{$omran-text} !important;
+    font-weight: 700 !important;
+    background: #F8FAFC !important;
+    border-bottom: 2px solid #{$omran-border} !important;
+}
+
+/* --- KANBAN cards: readable text --- */
+.o_kanban_view .o_kanban_record {
+    font-size: 0.9375rem;
+}
+.o_kanban_view .o_kanban_record .o_primary,
+.o_kanban_view .o_kanban_record strong {
+    color: #{$omran-text} !important;
+    font-weight: 600 !important;
+}
+.o_kanban_view .o_kanban_record .text-muted,
+.o_kanban_view .o_kanban_record small {
+    color: #{$omran-text-muted} !important;
+    font-size: 0.8125rem !important;
+}
+
+/* --- FORM LABELS: visible, not faded --- */
+.o_form_view label,
+.o_form_view .o_form_label {
+    color: #{$omran-text-muted} !important;
+    font-weight: 600 !important;
+    font-size: 0.875rem !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+}
+
+/* --- FORM VALUES: stronger contrast --- */
+.o_form_view .o_field_widget {
+    color: #{$omran-text} !important;
+    font-weight: 500;
+}
+.o_form_view .o_field_widget input,
+.o_form_view .o_field_widget textarea,
+.o_form_view .o_field_widget select {
+    color: #{$omran-text} !important;
+    font-size: 0.9375rem !important;
+}
+
+/* --- PLACEHOLDERS --- */
+.o_form_view input::placeholder,
+.o_form_view textarea::placeholder {
+    color: #{$omran-text-faint} !important;
+    opacity: 1;
+}
+
+/* --- STAT BUTTONS: readable labels --- */
+.o_form_view .oe_button_box .oe_stat_button .o_stat_value {
+    font-size: 1.25rem !important;        /* bigger number */
+    color: #{$omran-primary} !important;
+    font-weight: 700 !important;
+}
+.o_form_view .oe_button_box .oe_stat_button .o_stat_text {
+    font-size: 0.8125rem !important;      /* 13px instead of tiny 10px */
+    text-transform: none !important;      /* no uppercase */
+    letter-spacing: 0 !important;
+    color: #{$omran-text-muted} !important;
+    font-weight: 500 !important;
+}
+
+/* --- DROPDOWN menu items: readable --- */
+.dropdown-menu .dropdown-item {
+    font-size: 0.9375rem !important;
+    padding: 0.5rem 0.875rem !important;
+    color: #{$omran-text} !important;
+}
+
+/* --- BUTTONS: strong and legible --- */
+.btn {
+    font-size: 0.9375rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0 !important;
+    padding: 0.4375rem 0.875rem;
+}
+.btn-primary {
+    color: #fff !important;
+}
+
+/* --- TABS: no uppercase, bigger --- */
+.o_notebook_headers .nav-link,
+.nav-tabs .nav-link {
+    font-size: 0.9375rem !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    color: #{$omran-text-muted} !important;
+    font-weight: 500 !important;
+}
+.o_notebook_headers .nav-link.active,
+.nav-tabs .nav-link.active {
+    color: #{$omran-primary} !important;
+    font-weight: 700 !important;
+}
+
+/* --- STATUS BAR: readable stage names --- */
+.o_form_view .o_statusbar_status .btn {
+    font-size: 0.9375rem !important;
+    font-weight: 500 !important;
+    text-transform: none !important;
+    padding: 0.4375rem 0.875rem !important;
+}
+
+/* --- DASHBOARD: stat numbers readable --- */
+.omran_stat .o_field_widget,
+.omran_stat .omran_big_num {
+    font-size: 1.875rem !important;
+    font-weight: 700 !important;
+}
+.omran_stat_label {
+    font-size: 0.8125rem !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    color: #{$omran-text-muted} !important;
+    font-weight: 600 !important;
+}
+.omran_stat_foot,
+.omran_stat_foot * {
+    font-size: 0.875rem !important;
+    color: #{$omran-text-muted} !important;
+}
+
+/* --- SEARCH PANEL (left rail): legible --- */
+.o_search_panel_category_value,
+.o_search_panel_filter_value {
+    font-size: 0.9375rem !important;
+    padding: 0.5rem 0.75rem !important;
+}
+.o_search_panel_section_header {
+    font-size: 0.8125rem !important;
+    text-transform: none !important;
+    color: #{$omran-text} !important;
+    font-weight: 700 !important;
+    letter-spacing: 0 !important;
+}
+
+/* --- CHATTER messages --- */
+.o-mail-Message {
+    font-size: 0.9375rem !important;
+}
+.o-mail-Message-author {
+    color: #{$omran-text} !important;
+    font-weight: 600 !important;
+}
+.o-mail-Message-date {
+    color: #{$omran-text-muted} !important;
+    font-size: 0.8125rem !important;
+}
+
+/* --- TABLE CELLS: numeric columns align --- */
+.o_list_view td.o_list_number,
+.o_list_view td.o_data_cell[data-column-type="monetary"],
+.o_list_view td.o_monetary_cell {
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+}
+
+/* --- SECTION / GROUP TITLES on forms --- */
+.o_form_view h2,
+.o_form_view h3,
+.o_form_view .o_horizontal_separator {
+    color: #{$omran-primary} !important;
+    font-weight: 700 !important;
+    font-size: 1.0625rem !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    margin-top: 1.25rem;
+    margin-bottom: 0.625rem;
+}
+
+/* --- SEARCH VIEW: visible text --- */
+.o_searchview input {
+    font-size: 0.9375rem !important;
+    color: #{$omran-text} !important;
+}
+.o_searchview .o_searchview_facet {
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+}
+
+/* --- BREADCRUMBS: readable hierarchy --- */
+.o_breadcrumb {
+    font-size: 0.9375rem !important;
+}
+.o_breadcrumb .breadcrumb-item {
+    color: #{$omran-text-muted} !important;
+}
+.o_breadcrumb .active {
+    color: #{$omran-text} !important;
+    font-weight: 600 !important;
+}
+
+/* --- FOCUS RING: visible everywhere --- */
+*:focus-visible {
+    outline: 2px solid #{$omran-primary} !important;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+input:focus,
+textarea:focus,
+select:focus,
+.form-control:focus {
+    outline: none !important;
+    border-color: #{$omran-primary} !important;
+    box-shadow: 0 0 0 3px rgba(30, 27, 75, 0.12) !important;
+}
+
+/* --- DISABLED inputs: still readable --- */
+input:disabled,
+textarea:disabled,
+.form-control:disabled,
+.form-control[readonly] {
+    color: #{$omran-text} !important;
+    opacity: 0.85;
+    background: #F8FAFC !important;
+}
+
+/* --- ARABIC / RTL: slightly larger for Arabic diacritics --- */
+[dir="rtl"] .o_web_client,
+[dir="rtl"] .o_web_client *,
+:lang(ar) .o_web_client,
+:lang(ar) .o_web_client * {
+    font-size: 1rem;                    /* 16px for Arabic — more comfortable */
+    line-height: 1.55;
+    letter-spacing: 0 !important;
+}

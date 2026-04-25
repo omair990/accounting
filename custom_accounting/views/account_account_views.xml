@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Chart of Accounts: Tree View -->
+    <record id="view_account_account_tree" model="ir.ui.view">
+        <field name="name">account.account.tree</field>
+        <field name="model">account.account</field>
+        <field name="arch" type="xml">
+            <tree string="Chart of Accounts" decoration-muted="deprecated == True">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="account_type_id"/>
+                <field name="internal_group"/>
+                <field name="reconcile"/>
+                <field name="current_balance" sum="Total Balance"/>
+                <field name="deprecated" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Chart of Accounts: Form View -->
+    <record id="view_account_account_form" model="ir.ui.view">
+        <field name="name">account.account.form</field>
+        <field name="model">account.account</field>
+        <field name="arch" type="xml">
+            <form string="Account">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="code"/>
+                        <h1>
+                            <field name="code" placeholder="e.g. 1100"/>
+                        </h1>
+                        <label for="name"/>
+                        <h2>
+                            <field name="name" placeholder="Account Name"/>
+                        </h2>
+                    </div>
+                    <group>
+                        <group string="Configuration">
+                            <field name="account_type_id"/>
+                            <field name="internal_group" readonly="1"/>
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                            <field name="reconcile"/>
+                            <field name="deprecated"/>
+                        </group>
+                        <group string="Balance">
+                            <field name="current_balance"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <field name="note" placeholder="Internal notes about this account..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Chart of Accounts: Search View -->
+    <record id="view_account_account_search" model="ir.ui.view">
+        <field name="name">account.account.search</field>
+        <field name="model">account.account</field>
+        <field name="arch" type="xml">
+            <search string="Search Accounts">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="account_type_id"/>
+                <filter name="filter_receivable" string="Receivable"
+                    domain="[('account_type_id.type', '=', 'receivable')]"/>
+                <filter name="filter_payable" string="Payable"
+                    domain="[('account_type_id.type', '=', 'payable')]"/>
+                <filter name="filter_assets" string="Assets"
+                    domain="[('internal_group', '=', 'asset')]"/>
+                <filter name="filter_liabilities" string="Liabilities"
+                    domain="[('internal_group', '=', 'liability')]"/>
+                <filter name="filter_income" string="Income"
+                    domain="[('internal_group', '=', 'income')]"/>
+                <filter name="filter_expense" string="Expenses"
+                    domain="[('internal_group', '=', 'expense')]"/>
+                <separator/>
+                <filter name="filter_reconcilable" string="Reconcilable"
+                    domain="[('reconcile', '=', True)]"/>
+                <filter name="filter_deprecated" string="Deprecated"
+                    domain="[('deprecated', '=', True)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_type" string="Account Type"
+                        context="{'group_by': 'account_type_id'}"/>
+                    <filter name="group_by_internal_group" string="Internal Group"
+                        context="{'group_by': 'internal_group'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_account_account" model="ir.actions.act_window">
+        <field name="name">Chart of Accounts</field>
+        <field name="res_model">account.account</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_account_account_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new account
+            </p>
+            <p>
+                Set up your chart of accounts to classify all financial transactions.
+            </p>
+        </field>
+    </record>
+</odoo>

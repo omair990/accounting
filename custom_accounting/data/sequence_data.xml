@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sequences for entry numbering -->
+        <record id="sequence_sale_journal" model="ir.sequence">
+            <field name="name">Sales Journal</field>
+            <field name="code">account.move.sale</field>
+            <field name="prefix">INV/%(year)s/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="sequence_purchase_journal" model="ir.sequence">
+            <field name="name">Purchase Journal</field>
+            <field name="code">account.move.purchase</field>
+            <field name="prefix">BILL/%(year)s/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="sequence_bank_journal" model="ir.sequence">
+            <field name="name">Bank Journal</field>
+            <field name="code">account.move.bank</field>
+            <field name="prefix">BNK/%(year)s/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="sequence_cash_journal" model="ir.sequence">
+            <field name="name">Cash Journal</field>
+            <field name="code">account.move.cash</field>
+            <field name="prefix">CSH/%(year)s/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="sequence_misc_journal" model="ir.sequence">
+            <field name="name">Miscellaneous Journal</field>
+            <field name="code">account.move.general</field>
+            <field name="prefix">MISC/%(year)s/</field>
+            <field name="padding">4</field>
+        </record>
+    </data>
+</odoo>

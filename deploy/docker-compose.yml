@@ -1,0 +1,55 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${ODOO_DB_USER}
+      POSTGRES_PASSWORD: ${ODOO_DB_PASSWORD}
+      POSTGRES_DB: ${ODOO_DB_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${ODOO_DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    shm_size: 512m
+
+  odoo:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ODOO_DB_HOST: db
+      ODOO_DB_USER: ${ODOO_DB_USER}
+      ODOO_DB_PASSWORD: ${ODOO_DB_PASSWORD}
+      ODOO_DB_NAME: ${ODOO_DB_NAME}
+      ODOO_ADMIN_PASSWD: ${ODOO_ADMIN_PASSWD}
+      ODOO_WORKERS: ${ODOO_WORKERS:-4}
+    volumes:
+      - odoofiles:/var/lib/odoo
+      - odoologs:/var/log/odoo
+    expose:
+      - "8069"
+      - "8072"
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    depends_on:
+      - odoo
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/odoo.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+
+volumes:
+  pgdata:
+  odoofiles:
+  odoologs:
