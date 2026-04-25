@@ -116,5 +116,65 @@ else:
     print("WARNING: omran_dashboard.action_omran_dashboard not found")
 PY
 
+# Strip non-ERP modules (website, POS, mass_mailing, fleet, etc.). Same list
+# we use locally in uninstall_non_erp.py. Each uninstall is isolated in its
+# own try/rollback because button_immediate_uninstall commits + rebuilds the
+# registry — savepoints don't survive that boundary. After the first
+# successful boot the search returns empty and this becomes a fast no-op.
+echo "==> strip non-ERP modules (website, POS, mass_mailing, etc.)"
+python "$ODOO_BIN" "${ODOO_ARGS[@]}" --no-http shell <<'PY' 2>&1 | tail -40 || true
+to_remove = [
+    'website', 'website_sale', 'website_sale_product_configurator',
+    'website_crm', 'website_crm_sms', 'website_sms',
+    'website_mass_mailing', 'website_mass_mailing_sms',
+    'website_mail', 'website_payment',
+    'website_hr_recruitment', 'website_form_project', 'website_links',
+    'website_event', 'website_event_crm', 'website_event_sale',
+    'website_partner', 'website_blog', 'website_forum', 'website_slides',
+    'test_website', 'test_website_modules', 'test_website_slides_full',
+    'point_of_sale', 'pos_restaurant', 'pos_hr',
+    'pos_loyalty', 'pos_mercury', 'pos_six', 'pos_adyen',
+    'fleet', 'lunch', 'maintenance', 'survey',
+    'event', 'event_sale',
+    'mass_mailing', 'mass_mailing_sms', 'mass_mailing_crm',
+    'mass_mailing_event', 'mass_mailing_event_track',
+    'sms', 'membership', 'repair', 'project_todo', 'social_media',
+]
+todo = env['ir.module.module'].search([
+    ('name', 'in', to_remove), ('state', '=', 'installed'),
+])
+if not todo:
+    print("nothing to strip")
+else:
+    names = todo.mapped('name')
+    print(f"will uninstall: {names}")
+    for name in names:
+        try:
+            m = env['ir.module.module'].search([
+                ('name', '=', name), ('state', '=', 'installed'),
+            ], limit=1)
+            if not m:
+                print(f"  [GONE] {name}")
+                continue
+            m.button_immediate_uninstall()
+            env.cr.commit()
+            print(f"  [OK] {name}")
+        except Exception as e:
+            env.cr.rollback()
+            print(f"  [SKIP] {name}: {e!s:.150}")
+    # Sweep stale ir.asset rows from uninstalled modules.
+    installed = set(env['ir.module.module'].search([
+        ('state', '=', 'installed'),
+    ]).mapped('name'))
+    stale = [
+        a.id for a in env['ir.asset'].search([])
+        if (a.path or '').lstrip('/').split('/', 1)[0] not in installed
+    ]
+    if stale:
+        env['ir.asset'].browse(stale).unlink()
+        env.cr.commit()
+        print(f"  swept {len(stale)} stale ir.asset rows")
+PY
+
 echo "==> starting Odoo HTTP on port ${HTTP_PORT}"
 exec python "$ODOO_BIN" "${ODOO_ARGS[@]}" --http-port="${HTTP_PORT}"
