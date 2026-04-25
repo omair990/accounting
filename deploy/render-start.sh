@@ -2,8 +2,8 @@
 # Render.com start phase.
 #
 # - Parses DATABASE_URL into the env vars Odoo expects.
-# - On first boot (empty DB), initialises the schema with base + custom
-#   modules, then exits. The next exec() starts the HTTP server.
+# - On first boot (empty DB), bootstraps the schema with base + custom
+#   modules, then exits the init pass. The next exec() starts HTTP.
 # - On subsequent boots, the init step is skipped via a fast probe.
 set -euo pipefail
 
@@ -28,8 +28,12 @@ emit("DB_NAME", (u.path or "").lstrip("/"))
 PY
 )"
 
-ADDONS_PATH="oca/web,oca/account-financial-tools,oca/account-financial-reporting,oca/server-ux,oca/reporting-engine,."
+# Odoo's full addons tree lives under both odoo-src/odoo/addons (core
+# internals) and odoo-src/addons (user-facing apps). Then OCA, then this
+# repo root for the custom modules.
+ADDONS_PATH="odoo-src/odoo/addons,odoo-src/addons,oca/web,oca/account-financial-tools,oca/account-financial-reporting,oca/server-ux,oca/reporting-engine,."
 HTTP_PORT="${PORT:-8069}"
+ODOO_BIN="odoo-src/odoo-bin"
 
 ODOO_ARGS=(
     --addons-path="${ADDONS_PATH}"
@@ -69,7 +73,7 @@ PY
 
 if [ "$INITIALIZED" = "no" ]; then
     echo "==> first boot: initialising database with base + custom modules"
-    python -m odoo "${ODOO_ARGS[@]}" \
+    python "$ODOO_BIN" "${ODOO_ARGS[@]}" \
         -i base,web,custom_accounting,omran_dashboard,omran_branding,erp_lock \
         --stop-after-init
     echo "==> init complete"
@@ -77,10 +81,10 @@ elif [ "$INITIALIZED" = "yes" ]; then
     echo "==> database already initialised, skipping init"
 else
     echo "==> probe failed, attempting init anyway (idempotent)"
-    python -m odoo "${ODOO_ARGS[@]}" \
+    python "$ODOO_BIN" "${ODOO_ARGS[@]}" \
         -i base,web,custom_accounting,omran_dashboard,omran_branding,erp_lock \
         --stop-after-init || true
 fi
 
 echo "==> starting Odoo HTTP on port ${HTTP_PORT}"
-exec python -m odoo "${ODOO_ARGS[@]}" --http-port="${HTTP_PORT}"
+exec python "$ODOO_BIN" "${ODOO_ARGS[@]}" --http-port="${HTTP_PORT}"
