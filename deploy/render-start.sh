@@ -91,6 +91,22 @@ if [ "$INITIALIZED" = "no" ]; then
         -i base,web,custom_accounting,omran_dashboard,omran_branding,erp_lock \
         --stop-after-init
     echo "==> init complete"
+
+    # Force every user to land on the OCIT dashboard. The data file in
+    # omran_dashboard does this with noupdate=1 (only runs on first install
+    # of that module), but it can race with admin-user creation in some
+    # scenarios. Re-applying here is idempotent and cheap.
+    echo "==> normalize: set OCIT Home as default action for all users"
+    python "$ODOO_BIN" "${ODOO_ARGS[@]}" --no-http shell <<'PY' 2>&1 | tail -10 || true
+action = env.ref('omran_dashboard.action_omran_dashboard', raise_if_not_found=False)
+if action:
+    users = env['res.users'].search([])
+    users.write({'action_id': action.id})
+    env.cr.commit()
+    print(f"home action set for {len(users)} users")
+else:
+    print("WARNING: omran_dashboard.action_omran_dashboard not found")
+PY
 elif [ "$INITIALIZED" = "yes" ]; then
     echo "==> database already initialised, skipping init"
 else
