@@ -1,0 +1,57 @@
+# Render Blueprint — provisions Postgres + Odoo web service in one click.
+#
+# How to use:
+#   1. Push this file to the default branch on GitHub (already done if you
+#      committed it).
+#   2. Go to https://dashboard.render.com/select-repo?type=blueprint
+#   3. Connect the omair990/accounting repo. Render reads this file and
+#      creates the database + web service.
+#
+# Plans / sizing notes:
+#   - Postgres `free` is fine for evaluation but expires after 90 days.
+#     Upgrade to `basic-256mb` ($7/mo) for a persistent DB.
+#   - Web service is set to `starter` ($7/mo, 512MB RAM). Odoo runs but is
+#     tight; a single heavy request may OOM. For real use bump to `standard`
+#     ($25/mo, 2GB) by editing this file or in the Render dashboard.
+#   - First build takes ~5–8 minutes (clones 5 OCA repos + installs deps).
+
+databases:
+  - name: ocit-db
+    databaseName: ocit
+    user: ocit
+    plan: free
+    postgresMajorVersion: "16"
+
+services:
+  - type: web
+    name: ocit-accounting
+    runtime: docker
+    plan: starter
+    region: frankfurt          # change to your nearest region (oregon, ohio, singapore, frankfurt)
+    branch: main
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /web/login
+    autoDeploy: true
+    envVars:
+      # Postgres connection string is wired automatically from the database above.
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ocit-db
+          property: connectionString
+
+      # Random 32-char password for Odoo's database management UI.
+      - key: ADMIN_PASSWORD
+        generateValue: true
+
+      # Force Odoo to bind to whatever port Render injects.
+      - key: PORT
+        value: "8069"
+
+      # Optional: limit Odoo to a single DB with this name (matches the one
+      # created by the `databases:` block above).
+      - key: DB_NAME
+        value: ocit
+
+      # Run with workers=0 on starter plan; raise to 2 on standard.
+      - key: ODOO_WORKERS
+        value: "0"
