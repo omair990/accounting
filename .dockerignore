@@ -1,0 +1,46 @@
+# Keep the build context small and avoid leaking local secrets/state.
+.git
+.gitignore
+.gitattributes
+
+# Local config (contains admin_passwd / DB creds)
+odoo.conf
+odoo.log
+*.log
+
+# Odoo runtime data
+.odoo_data/
+filestore/
+sessions/
+
+# Vendor source trees that are cloned at build time
+odoo/
+oca/
+
+# Python virtualenvs and caches
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# IDE / OS junk
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Documentation source images that aren't needed in the image
+*.md
+README*
+CHANGELOG*
+LICENSE*
+docs/
+
+# Other
+node_modules/
+dist/
+build/
+deploy/
+main.py
