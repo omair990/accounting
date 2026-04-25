@@ -15,9 +15,14 @@ if [ ! -d odoo-src ]; then
     rm -rf odoo-src/.git
 fi
 
-echo "==> pip install Odoo's own requirements"
+echo "==> pip install Odoo's own requirements (skipping python-ldap)"
 pip install --upgrade pip
-pip install -r odoo-src/requirements.txt
+
+# python-ldap needs libldap2-dev / lber.h, which Render's Python runtime
+# doesn't ship. It's only used by the optional auth_ldap module, so we
+# strip it out and continue without LDAP authentication support.
+grep -viE '^(python-ldap|ldap)' odoo-src/requirements.txt > /tmp/odoo-req.txt
+pip install -r /tmp/odoo-req.txt
 
 echo "==> pip install this repo's extras"
 pip install -r requirements.txt
