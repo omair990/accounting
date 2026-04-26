@@ -3,6 +3,17 @@
    Applied globally across every Odoo app (CRM, Sales, HR, etc.)
    ============================================================ */
 
+/* ---------- ONBOARDING BANNERS (hide stock Odoo wizards) ----------
+   The four-step "setup your account / docs / invoice / Stripe" panel
+   that appears on Invoicing/Sales/etc. lists. Its step images live in
+   ir.binary fields populated at install time; on Render the binary
+   load was inconsistent, leaving broken-image placeholders. Hiding
+   the entire panel because (a) the icons render broken, (b) we ship
+   our own setup flow, and (c) the panel adds no value once a deploy
+   is running. To re-enable, delete this rule. */
+.o_onboarding_container,
+.o_onboarding_main { display: none !important; }
+
 /* ---------- STAT BUTTONS (form header pill buttons) ---------- */
 .o_form_view .oe_button_box .oe_stat_button,
 .o_stat_button {

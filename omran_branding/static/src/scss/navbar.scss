@@ -82,9 +82,18 @@
 }
 
 /* -- Menu entries -- */
+/* Odoo's default styles paint .o_nav_entry / .dropdown-toggle with
+   $o-navbar-background by default. Our navbar is now a dark navy
+   gradient, so that default ends up looking like a lighter purple
+   chip behind every section name. Force transparent at rest so the
+   gradient shows through; backgrounds only appear on hover/active. */
 .o_main_navbar .o_menu_sections > li > a,
+.o_main_navbar .o_menu_sections .o_nav_entry,
+.o_main_navbar .o_menu_sections .dropdown-toggle,
 .o_main_navbar .o_nav_entry,
 .o_main_navbar .o_menu_entry_lvl_1 {
+    background: transparent !important;
+    border: 1px solid transparent !important;
     color: rgba(255, 255, 255, 0.85) !important;
     font-weight: 500 !important;
     font-size: 0.9375rem !important;
