@@ -52,6 +52,7 @@
         'reports/report_trial_balance.xml',
         'reports/report_profit_loss.xml',
         'reports/report_balance_sheet.xml',
+        'reports/report_aged.xml',
         'reports/report_invoice_template.xml',
         # Menus
         'views/menu_items.xml',

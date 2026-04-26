@@ -121,6 +121,18 @@
         action="action_report_balance_sheet_wizard"
         sequence="40"/>
 
+    <menuitem id="menu_report_aged_receivables"
+        name="Aged Receivables"
+        parent="menu_accounting_reports"
+        action="action_report_aged_receivables_wizard"
+        sequence="50"/>
+
+    <menuitem id="menu_report_aged_payables"
+        name="Aged Payables"
+        parent="menu_accounting_reports"
+        action="action_report_aged_payables_wizard"
+        sequence="60"/>
+
     <!-- ===================== CONFIGURATION ===================== -->
     <menuitem id="menu_accounting_config"
         name="Configuration"

@@ -16,11 +16,18 @@ class AccountReportWizard(models.TransientModel):
         ('trial_balance', 'Trial Balance'),
         ('profit_loss', 'Profit and Loss'),
         ('balance_sheet', 'Balance Sheet'),
+        ('aged_receivables', 'Aged Receivables'),
+        ('aged_payables', 'Aged Payables'),
     ], string='Report Type', required=True)
 
-    date_from = fields.Date(string='Start Date', required=True)
-    date_to = fields.Date(string='End Date', required=True,
+    date_from = fields.Date(string='Start Date',
+                            default=lambda self: fields.Date.context_today(self).replace(day=1))
+    date_to = fields.Date(string='End Date',
                           default=fields.Date.context_today)
+    aged_as_of_date = fields.Date(
+        string='As of Date',
+        default=fields.Date.context_today,
+        help='Aged-balance reports compute days outstanding as of this date.')
     account_ids = fields.Many2many(
         'account.account', string='Accounts',
         help='Leave empty to include all accounts.')
@@ -38,7 +45,10 @@ class AccountReportWizard(models.TransientModel):
     @api.constrains('date_from', 'date_to')
     def _check_dates(self):
         for wizard in self:
-            if wizard.date_from > wizard.date_to:
+            # Aged reports only use aged_as_of_date; skip the range check.
+            if wizard.report_type in ('aged_receivables', 'aged_payables'):
+                continue
+            if wizard.date_from and wizard.date_to and wizard.date_from > wizard.date_to:
                 raise UserError("Start date must be before end date.")
 
     def action_generate_report(self):
@@ -54,11 +64,24 @@ class AccountReportWizard(models.TransientModel):
             'target_move': self.target_move,
         }
 
+        data['aged_as_of_date'] = self.aged_as_of_date
+
+        # Aged reports compute their own dataset and pass it through `data`,
+        # so the template doesn't need a custom AbstractModel renderer.
+        if self.report_type == 'aged_receivables':
+            data.update(self._get_aged_data('receivable'))
+            data['as_of'] = fields.Date.to_string(data['as_of']) if data.get('as_of') else ''
+        elif self.report_type == 'aged_payables':
+            data.update(self._get_aged_data('payable'))
+            data['as_of'] = fields.Date.to_string(data['as_of']) if data.get('as_of') else ''
+
         report_map = {
             'general_ledger': 'custom_accounting.action_report_general_ledger',
             'trial_balance': 'custom_accounting.action_report_trial_balance',
             'profit_loss': 'custom_accounting.action_report_profit_loss',
             'balance_sheet': 'custom_accounting.action_report_balance_sheet',
+            'aged_receivables': 'custom_accounting.action_report_aged_receivables',
+            'aged_payables': 'custom_accounting.action_report_aged_payables',
         }
 
         report_action = self.env.ref(report_map[self.report_type])
@@ -158,4 +181,96 @@ class AccountReportWizard(models.TransientModel):
             'total_assets': total_assets,
             'total_liabilities': total_liabilities,
             'total_equity': total_equity,
+        }
+
+    # Aged balance bucket boundaries (days). Edit here to retune.
+    AGE_BUCKETS = (
+        ('not_due', 'Not Due',     None, 0),
+        ('b_0_30',  '0–30',        0,    30),
+        ('b_31_60', '31–60',       31,   60),
+        ('b_61_90', '61–90',       61,   90),
+        ('b_90_p',  '90+',         91,   None),
+    )
+
+    def _get_aged_data(self, kind):
+        """Aged receivables (kind='receivable') or payables (kind='payable').
+
+        Returns a dict with per-partner aged buckets and overall totals,
+        suitable for the QWeb template in reports/report_aged.xml.
+        """
+        self.ensure_one()
+        as_of = self.aged_as_of_date or fields.Date.context_today(self)
+
+        # Customer invoices vs vendor bills.
+        if kind == 'receivable':
+            move_types = ('out_invoice', 'out_refund')
+            sign = 1.0
+        else:  # payable
+            move_types = ('in_invoice', 'in_refund')
+            sign = -1.0  # vendor bills are credit balances
+
+        moves = self.env['account.move'].search([
+            ('move_type', 'in', move_types),
+            ('state', '=', 'posted'),
+            ('payment_state', 'in', ('not_paid', 'partial', 'in_payment')),
+            ('invoice_date', '<=', as_of),
+        ])
+
+        # Bucket per partner.
+        rows = {}
+        bucket_codes = [b[0] for b in self.AGE_BUCKETS]
+        for mv in moves:
+            partner = mv.partner_id
+            if not partner:
+                continue
+            residual = mv.amount_residual_signed * (1 if kind == 'receivable' else -1)
+            if mv.move_type in ('out_refund', 'in_refund'):
+                residual = -residual
+            if abs(residual) < 0.005:
+                continue
+
+            due = mv.invoice_date_due or mv.invoice_date
+            age_days = (as_of - due).days if due else 0
+
+            bucket = 'b_90_p'
+            for code, _label, lo, hi in self.AGE_BUCKETS:
+                if code == 'not_due' and age_days < 0:
+                    bucket = 'not_due'; break
+                if lo is not None and hi is not None and lo <= age_days <= hi:
+                    bucket = code; break
+                if code == 'b_90_p' and age_days >= 91:
+                    bucket = 'b_90_p'; break
+
+            row = rows.setdefault(partner.id, {
+                'partner_name': partner.display_name,
+                'partner_id': partner.id,
+                'total': 0.0,
+                **{c: 0.0 for c in bucket_codes},
+                'lines': [],
+            })
+            row[bucket] += residual
+            row['total'] += residual
+            row['lines'].append({
+                'date': mv.invoice_date,
+                'due': due,
+                'name': mv.name,
+                'days': age_days,
+                'bucket': bucket,
+                'residual': residual,
+            })
+
+        rows_list = sorted(rows.values(), key=lambda r: -abs(r['total']))
+
+        totals = {c: sum(r[c] for r in rows_list) for c in bucket_codes}
+        totals['total'] = sum(r['total'] for r in rows_list)
+
+        # NOTE: keep this dict JSON-serialisable — it's passed to QWeb via
+        # the report's `data` argument. Don't include recordsets here.
+        return {
+            'kind': kind,
+            'as_of': as_of,
+            'currency_symbol': (self.env.company.currency_id.symbol or ''),
+            'buckets': list(self.AGE_BUCKETS),
+            'rows': rows_list,
+            'totals': totals,
         }

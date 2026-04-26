@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Shared aged-balance template (receivables and payables) -->
+    <template id="report_aged_document">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2>
+                        <t t-if="data.get('kind') == 'receivable'">Aged Receivables</t>
+                        <t t-else="">Aged Payables</t>
+                    </h2>
+                    <p>
+                        <strong>As of:</strong>
+                        <span t-esc="data.get('as_of')"/>
+                    </p>
+
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Partner</th>
+                                <t t-foreach="data['buckets']" t-as="b">
+                                    <th class="text-end">
+                                        <span t-esc="b[1]"/>
+                                    </th>
+                                </t>
+                                <th class="text-end">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="data['rows']" t-as="row">
+                                <tr>
+                                    <td t-esc="row['partner_name']"/>
+                                    <t t-foreach="data['buckets']" t-as="b">
+                                        <td class="text-end">
+                                            <span t-esc="'%.2f' % row[b[0]]"/>
+                                        </td>
+                                    </t>
+                                    <td class="text-end fw-bold">
+                                        <span t-esc="'%.2f' % row['total']"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                        <tfoot>
+                            <tr class="fw-bold">
+                                <td>Total</td>
+                                <t t-foreach="data['buckets']" t-as="b">
+                                    <td class="text-end">
+                                        <span t-esc="'%.2f' % data['totals'][b[0]]"/>
+                                    </td>
+                                </t>
+                                <td class="text-end">
+                                    <span t-esc="'%.2f' % data['totals']['total']"/>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <p class="text-muted small mt-2">
+                        Buckets are computed from due date (or invoice date if no
+                        due date is set). Negative amounts reflect credit notes
+                        or overpayments.
+                    </p>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- One report action per kind, both pointing at the shared template.
+         The wizard's _get_aged_data() decides which dataset to build. -->
+    <record id="action_report_aged_receivables" model="ir.actions.report">
+        <field name="name">Aged Receivables</field>
+        <field name="model">account.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">custom_accounting.report_aged_document</field>
+        <field name="report_file">custom_accounting.report_aged_document</field>
+    </record>
+
+    <record id="action_report_aged_payables" model="ir.actions.report">
+        <field name="name">Aged Payables</field>
+        <field name="model">account.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">custom_accounting.report_aged_document</field>
+        <field name="report_file">custom_accounting.report_aged_document</field>
+    </record>
+
+    <!-- Wizard launch actions for the menu -->
+    <record id="action_report_aged_receivables_wizard" model="ir.actions.act_window">
+        <field name="name">Aged Receivables</field>
+        <field name="res_model">account.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_report_type': 'aged_receivables'}</field>
+    </record>
+
+    <record id="action_report_aged_payables_wizard" model="ir.actions.act_window">
+        <field name="name">Aged Payables</field>
+        <field name="res_model">account.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_report_type': 'aged_payables'}</field>
+    </record>
+</odoo>

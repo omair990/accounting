@@ -7,15 +7,20 @@
         <field name="arch" type="xml">
             <form string="Financial Report">
                 <group>
-                    <group string="Period">
+                    <group string="Period" invisible="report_type in ('aged_receivables','aged_payables')">
                         <field name="date_from"/>
                         <field name="date_to"/>
                         <field name="target_move"/>
                     </group>
+                    <group string="As Of" invisible="report_type not in ('aged_receivables','aged_payables')">
+                        <field name="aged_as_of_date"/>
+                    </group>
                     <group string="Filters">
-                        <field name="account_ids" widget="many2many_tags"/>
+                        <field name="account_ids" widget="many2many_tags"
+                            invisible="report_type in ('aged_receivables','aged_payables')"/>
                         <field name="partner_ids" widget="many2many_tags"/>
-                        <field name="journal_ids" widget="many2many_tags"/>
+                        <field name="journal_ids" widget="many2many_tags"
+                            invisible="report_type in ('aged_receivables','aged_payables')"/>
                     </group>
                 </group>
                 <field name="report_type" invisible="1"/>

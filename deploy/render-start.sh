@@ -112,6 +112,14 @@ else
         --stop-after-init || true
 fi
 
+# Refresh custom-module data files on every boot so views, menus, and reports
+# match the deployed code. -u on an installed module is fast (~5–10s each)
+# and safe; on a not-yet-installed module it logs and skips.
+echo "==> update custom modules data files"
+python "$ODOO_BIN" "${ODOO_ARGS[@]}" \
+    -u custom_accounting,omran_dashboard,omran_branding,erp_lock \
+    --stop-after-init || true
+
 # Always (idempotent): make every user land on the OCIT Home dashboard.
 # The omran_dashboard data file does this with noupdate=1 so it only fires
 # on first install. Re-applying here on every boot keeps the production
