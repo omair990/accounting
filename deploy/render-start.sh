@@ -189,13 +189,17 @@ else:
             except Exception as e:
                 env.cr.rollback()
                 print(f"  [SKIP] {name}: {e!s:.150}")
-        # Sweep stale ir.asset rows from uninstalled modules.
-        installed = set(env['ir.module.module'].search([
-            ('state', '=', 'installed'),
-        ]).mapped('name'))
+        # Sweep stale ir.asset rows whose FILE path lives under a stripped
+        # module's static dir. We must NOT match on bundle-include directives
+        # like `('include', 'web._assets_helpers')` — those store path =
+        # 'web._assets_helpers' (no slash, no `/static/`), and deleting them
+        # breaks every SCSS bundle that depends on the helper variables.
+        # Filter on `/static/` to ensure we only touch real file references.
+        to_remove_set = set(to_remove)
         stale = [
             a.id for a in env['ir.asset'].search([])
-            if (a.path or '').lstrip('/').split('/', 1)[0] not in installed
+            if '/static/' in (a.path or '')
+            and (a.path or '').lstrip('/').split('/', 1)[0] in to_remove_set
         ]
         if stale:
             env['ir.asset'].browse(stale).unlink()
@@ -205,6 +209,50 @@ else:
     env.cr.commit()
     print(f"sentinel '{SENTINEL}' set; future deploys will skip strip")
 PY
+
+# One-shot recovery: a previous version of the strip-sweep wiped ir.asset
+# bundle-include rows (path='web._assets_helpers' and similar), so the
+# web.assets_frontend / assets_backend bundles fail to compile and return
+# 500. Recreate them by re-updating every installed module — `-u` reloads
+# manifests, which re-creates ir.asset records owned by each module.
+# Sentinel-gated so this heavy operation runs at most once per database.
+RECOVERY_SENTINEL=$(python - <<'PY'
+import os, sys
+try:
+    import psycopg2
+    c = psycopg2.connect(
+        host=os.environ["DB_HOST"], port=int(os.environ["DB_PORT"]),
+        user=os.environ["DB_USER"], password=os.environ["DB_PASSWORD"],
+        dbname=os.environ["DB_NAME"], connect_timeout=10,
+    )
+    cur = c.cursor()
+    cur.execute(
+        "SELECT to_regclass('public.ir_config_parameter') IS NOT NULL")
+    if not cur.fetchone()[0]:
+        print("missing"); sys.exit(0)
+    cur.execute(
+        "SELECT value FROM ir_config_parameter "
+        "WHERE key = 'omran.assets_recovered_v1' LIMIT 1")
+    row = cur.fetchone()
+    print("set" if row and row[0] else "missing")
+    c.close()
+except Exception as e:
+    print(f"probe-failed: {e}", file=sys.stderr)
+    print("missing")
+PY
+)
+
+if [ "$RECOVERY_SENTINEL" = "missing" ]; then
+    echo "==> one-shot asset recovery: -u all to rebuild ir.asset rows"
+    python "$ODOO_BIN" "${ODOO_ARGS[@]}" -u all --stop-after-init || true
+    python "$ODOO_BIN" "${ODOO_ARGS[@]}" --no-http shell <<'PY' 2>&1 | tail -5 || true
+env['ir.config_parameter'].sudo().set_param('omran.assets_recovered_v1', '1')
+env.cr.commit()
+print("asset recovery sentinel set")
+PY
+else
+    echo "==> asset recovery already done, skipping"
+fi
 
 echo "==> starting Odoo HTTP on port ${HTTP_PORT}"
 exec python "$ODOO_BIN" "${ODOO_ARGS[@]}" --http-port="${HTTP_PORT}"
