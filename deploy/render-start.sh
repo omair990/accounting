@@ -35,6 +35,13 @@ ADDONS_PATH="odoo-src/odoo/addons,odoo-src/addons,oca/web,oca/account-financial-
 HTTP_PORT="${PORT:-8069}"
 ODOO_BIN="odoo-src/odoo-bin"
 
+# --workers: Render Starter has 1 vCPU + 512MB RAM. Multi-process
+#   doesn't help much there; keep 0 until you bump to standard ($25/mo,
+#   2GB), then switch to 2. Override at deploy time with WORKERS env var.
+# --limit-time-real / cpu: prevent runaway requests from holding the
+#   single thread.
+# --proxy-mode: trust X-Forwarded-* headers from Render's edge.
+ODOO_WORKERS="${WORKERS:-0}"
 ODOO_ARGS=(
     --addons-path="${ADDONS_PATH}"
     --db_host="${DB_HOST}"
@@ -43,9 +50,14 @@ ODOO_ARGS=(
     --db_password="${DB_PASSWORD}"
     -d "${DB_NAME}"
     --db-filter="^${DB_NAME}\$"
-    --workers=0
+    --workers="${ODOO_WORKERS}"
+    --limit-time-cpu=600
+    --limit-time-real=900
+    --limit-memory-soft=1073741824
+    --limit-memory-hard=1342177280
     --proxy-mode
     --without-demo=all
+    --log-level=info
 )
 
 # ---- detect DB state -----------------------------------------------------------

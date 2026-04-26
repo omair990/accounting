@@ -487,6 +487,47 @@ $omr-danger:    #DC2626;
     box-shadow: 0 14px 28px rgba(15, 14, 46, 0.3);
 }
 
+/* ====================== CLICKABLE KPI BUTTONS ======================
+   The KPI cards are rendered as <button type="object" .../> so a click
+   opens a filtered list. Reset native button chrome and let the cards
+   keep their existing visual treatment. */
+.o_omran_dashboard_pro .omran_kpi_btn,
+.o_omran_dashboard_pro .omran_mini_btn {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border: 0;
+    padding: inherit;
+    margin: 0;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    width: 100%;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+.o_omran_dashboard_pro .omran_kpi_btn:hover,
+.o_omran_dashboard_pro .omran_mini_btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(15, 14, 46, 0.14) !important;
+}
+.o_omran_dashboard_pro .omran_kpi_btn:focus-visible,
+.o_omran_dashboard_pro .omran_mini_btn:focus-visible {
+    outline: 2px solid #{$omr-accent};
+    outline-offset: 2px;
+}
+.o_omran_dashboard_pro .omran_kpi_btn::after {
+    content: "↗";
+    position: absolute;
+    top: 0.75rem;
+    right: 1rem;
+    color: #{$omr-faint};
+    font-size: 0.875rem;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+.o_omran_dashboard_pro .omran_kpi_btn:hover::after { opacity: 0.65; }
+
 /* ====================== RESPONSIVE ====================== */
 @media (max-width: 768px) {
     .omran_hero {

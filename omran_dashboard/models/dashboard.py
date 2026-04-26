@@ -186,3 +186,127 @@ class OmranDashboard(models.TransientModel):
             "target": "current",
             "context": {"create": False, "edit": False, "delete": False},
         }
+
+    # ---- Drill-down actions: each KPI on the dashboard opens a filtered list
+    # ----------------------------------------------------------------------
+    # Helper: build an act_window result with a domain. Models that aren't
+    # installed return False (the calling button will simply do nothing).
+
+    def _act_window(self, name, model, view_mode, domain=None, context=None):
+        if model not in self.env:
+            return False
+        return {
+            "type": "ir.actions.act_window",
+            "name": name,
+            "res_model": model,
+            "view_mode": view_mode,
+            "domain": domain or [],
+            "context": context or {},
+            "target": "current",
+        }
+
+    # Finance ---------------------------------------------------------------
+    def action_open_revenue_month(self):
+        first = fields.Date.context_today(self).replace(day=1)
+        return self._act_window(
+            "Revenue this month", "account.move", "list,form",
+            domain=[
+                ("move_type", "=", "out_invoice"),
+                ("state", "=", "posted"),
+                ("invoice_date", ">=", first),
+            ],
+        )
+
+    def action_open_outstanding(self):
+        return self._act_window(
+            "Outstanding receivables", "account.move", "list,form",
+            domain=[
+                ("move_type", "=", "out_invoice"),
+                ("state", "=", "posted"),
+                ("payment_state", "in", ("not_paid", "partial", "in_payment")),
+            ],
+        )
+
+    def action_open_overdue_invoices(self):
+        today = fields.Date.context_today(self)
+        return self._act_window(
+            "Overdue invoices", "account.move", "list,form",
+            domain=[
+                ("move_type", "=", "out_invoice"),
+                ("state", "=", "posted"),
+                ("payment_state", "in", ("not_paid", "partial")),
+                ("invoice_date_due", "<", today),
+            ],
+        )
+
+    def action_open_draft_invoices(self):
+        return self._act_window(
+            "Draft invoices and bills", "account.move", "list,form",
+            domain=[
+                ("move_type", "in", ("out_invoice", "in_invoice")),
+                ("state", "=", "draft"),
+            ],
+        )
+
+    # Sales / CRM -----------------------------------------------------------
+    def action_open_open_sales(self):
+        return self._act_window(
+            "Open sales orders", "sale.order", "list,form",
+            domain=[("state", "in", ("sale", "done"))],
+        )
+
+    def action_open_pipeline(self):
+        return self._act_window(
+            "Open opportunities", "crm.lead", "kanban,list,form",
+            domain=[
+                ("type", "=", "opportunity"),
+                ("probability", "<", 100),
+                ("active", "=", True),
+            ],
+        )
+
+    # Purchase --------------------------------------------------------------
+    def action_open_open_purchases(self):
+        return self._act_window(
+            "Open purchase orders", "purchase.order", "list,form",
+            domain=[("state", "in", ("purchase", "done"))],
+        )
+
+    # Inventory / partners --------------------------------------------------
+    def action_open_products(self):
+        return self._act_window(
+            "Products", "product.product", "kanban,list,form",
+            domain=[("sale_ok", "=", True)],
+        )
+
+    def action_open_customers(self):
+        return self._act_window(
+            "Customers", "res.partner", "kanban,list,form",
+            domain=[("customer_rank", ">", 0)],
+        )
+
+    # HR --------------------------------------------------------------------
+    def action_open_employees(self):
+        return self._act_window(
+            "Active employees", "hr.employee", "kanban,list,form",
+            domain=[("active", "=", True)],
+        )
+
+    def action_open_pending_leaves(self):
+        return self._act_window(
+            "Pending leave requests", "hr.leave", "list,form",
+            domain=[("state", "=", "confirm")],
+        )
+
+    # Project ---------------------------------------------------------------
+    def action_open_active_projects(self):
+        return self._act_window(
+            "Active projects", "project.project", "kanban,list,form",
+            domain=[("active", "=", True)],
+        )
+
+    def action_open_open_tasks(self):
+        return self._act_window(
+            "Open tasks", "project.task", "kanban,list,form",
+            domain=[("stage_id.fold", "=", False)],
+        )

@@ -19,9 +19,9 @@
                         </div>
                     </div>
 
-                    <!-- PRIMARY KPIs -->
+                    <!-- PRIMARY KPIs (clickable: each opens a filtered list) -->
                     <div class="omran_kpi_row omran_kpi_row_primary">
-                        <div class="omran_kpi omran_kpi_lg">
+                        <button type="object" name="action_open_revenue_month" class="omran_kpi omran_kpi_lg omran_kpi_btn">
                             <div class="omran_kpi_head">
                                 <i class="fa fa-line-chart"/>
                                 <span>Revenue this month</span>
@@ -30,9 +30,9 @@
                             <div class="omran_kpi_sub">
                                 Today <field name="revenue_today" widget="monetary" nolabel="1" readonly="1"/>
                             </div>
-                        </div>
+                        </button>
 
-                        <div class="omran_kpi omran_kpi_warning">
+                        <button type="object" name="action_open_overdue_invoices" class="omran_kpi omran_kpi_warning omran_kpi_btn">
                             <div class="omran_kpi_head">
                                 <i class="fa fa-clock-o"/>
                                 <span>Outstanding</span>
@@ -41,9 +41,9 @@
                             <div class="omran_kpi_sub">
                                 <field name="invoices_overdue_count" nolabel="1" readonly="1"/> overdue invoices
                             </div>
-                        </div>
+                        </button>
 
-                        <div class="omran_kpi">
+                        <button type="object" name="action_open_pipeline" class="omran_kpi omran_kpi_btn">
                             <div class="omran_kpi_head">
                                 <i class="fa fa-bullseye"/>
                                 <span>Pipeline</span>
@@ -52,9 +52,9 @@
                             <div class="omran_kpi_sub">
                                 <field name="open_opportunities" nolabel="1" readonly="1"/> opportunities
                             </div>
-                        </div>
+                        </button>
 
-                        <div class="omran_kpi">
+                        <button type="object" name="action_open_open_sales" class="omran_kpi omran_kpi_btn">
                             <div class="omran_kpi_head">
                                 <i class="fa fa-shopping-cart"/>
                                 <span>Sales this month</span>
@@ -63,69 +63,69 @@
                             <div class="omran_kpi_sub">
                                 <field name="sales_open_count" nolabel="1" readonly="1"/> open orders
                             </div>
-                        </div>
+                        </button>
                     </div>
 
                     <!-- OPERATIONS ROW -->
                     <div class="omran_section">
                         <h3 class="omran_section_h">Operations</h3>
                         <div class="omran_kpi_row omran_kpi_row_sm">
-                            <div class="omran_mini">
+                            <button type="object" name="action_open_employees" class="omran_mini omran_mini_btn">
                                 <i class="fa fa-users omran_mini_icon"/>
                                 <div>
                                     <field name="employee_count" nolabel="1" readonly="1" class="omran_mini_value"/>
                                     <div class="omran_mini_label">Active employees</div>
                                 </div>
-                            </div>
-                            <div class="omran_mini">
+                            </button>
+                            <button type="object" name="action_open_pending_leaves" class="omran_mini omran_mini_btn">
                                 <i class="fa fa-plane omran_mini_icon"/>
                                 <div>
                                     <field name="leaves_pending" nolabel="1" readonly="1" class="omran_mini_value"/>
                                     <div class="omran_mini_label">Leaves pending</div>
                                 </div>
-                            </div>
-                            <div class="omran_mini">
+                            </button>
+                            <button type="object" name="action_open_active_projects" class="omran_mini omran_mini_btn">
                                 <i class="fa fa-tasks omran_mini_icon"/>
                                 <div>
                                     <field name="active_projects" nolabel="1" readonly="1" class="omran_mini_value"/>
                                     <div class="omran_mini_label">Active projects</div>
                                 </div>
-                            </div>
-                            <div class="omran_mini">
+                            </button>
+                            <button type="object" name="action_open_open_tasks" class="omran_mini omran_mini_btn">
                                 <i class="fa fa-check-square-o omran_mini_icon"/>
                                 <div>
                                     <field name="open_tasks" nolabel="1" readonly="1" class="omran_mini_value"/>
                                     <div class="omran_mini_label">Open tasks</div>
                                 </div>
-                            </div>
-                            <div class="omran_mini">
+                            </button>
+                            <button type="object" name="action_open_products" class="omran_mini omran_mini_btn">
                                 <i class="fa fa-cube omran_mini_icon"/>
                                 <div>
                                     <field name="product_count" nolabel="1" readonly="1" class="omran_mini_value"/>
                                     <div class="omran_mini_label">Products</div>
                                 </div>
-                            </div>
-                            <div class="omran_mini">
+                            </button>
+                            <button type="object" name="action_open_customers" class="omran_mini omran_mini_btn">
                                 <i class="fa fa-user-plus omran_mini_icon"/>
                                 <div>
                                     <field name="customer_count" nolabel="1" readonly="1" class="omran_mini_value"/>
                                     <div class="omran_mini_label">Customers</div>
                                 </div>
-                            </div>
-                            <div class="omran_mini">
+                            </button>
+                            <button type="object" name="action_open_open_purchases" class="omran_mini omran_mini_btn">
                                 <i class="fa fa-truck omran_mini_icon"/>
                                 <div>
                                     <field name="purchase_open_count" nolabel="1" readonly="1" class="omran_mini_value"/>
                                     <div class="omran_mini_label">Open POs</div>
                                 </div>
-                            </div>
-                            <div class="omran_mini">
+                            </button>
+                            <button type="object" name="action_open_draft_invoices" class="omran_mini omran_mini_btn">
                                 <i class="fa fa-file-text-o omran_mini_icon"/>
                                 <div>
                                     <field name="invoices_draft_count" nolabel="1" readonly="1" class="omran_mini_value"/>
                                     <div class="omran_mini_label">Draft invoices</div>
                                 </div>
-                            </div>
+                            </button>
                         </div>
                     </div>
 
