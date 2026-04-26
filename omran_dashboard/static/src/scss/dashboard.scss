@@ -1,127 +1,555 @@
-/* ============ OCIT — App launcher (Home) + Apps page ============ */
+/* ============ OCIT Dashboard Pro — full redesign ============ */
 
-$omr-primary:    #1E1B4B;
-$omr-primary-dk: #14123A;
-$omr-accent:     #F5C518;
-$omr-text:       #0F172A;
-$omr-text-mid:   #334155;
-$omr-muted:      #475569;
+$omr-primary:   #1E1B4B;
+$omr-primary-dk:#14123A;
+$omr-accent:    #F5C518;
+$omr-accent-dk: #D4A712;
+$omr-secondary: #0F0E2E;
+$omr-surface:   #F8FAFC;
+$omr-surface-2: #F1F5F9;
+$omr-border:    #CBD5E1;
+$omr-border-lt: #E2E8F0;
+$omr-text:      #0F172A;
+$omr-text-mid:  #334155;
+$omr-muted:     #475569;
+$omr-faint:     #64748B;
+$omr-success:   #16A34A;
+$omr-warning:   #D97706;
+$omr-danger:    #DC2626;
 
-/* Soft lavender gradient that matches the reference screenshot. */
-$omr-launch-bg: linear-gradient(135deg, #E0DDF1 0%, #ECEAF6 45%, #F4F2FA 100%);
-$omr-launch-bg-light: linear-gradient(135deg, #ECEAF6 0%, #F4F2FA 100%);
-
-
-/* ====================== HOME LAUNCHER ====================== */
-
-/* class="o_omran_launcher" on <kanban> lands on the same element as
-   .o_kanban_view (Odoo's controller surfaces archInfo.className there). */
-.o_kanban_view.o_omran_launcher {
-    background: $omr-launch-bg !important;
-    padding: 4rem clamp(1.5rem, 6vw, 6rem) !important;
-
-    /* Wipe the default ungrouped flex-wrap layout and lay out as a
-       centered tile grid. .o_kanban_renderer is the same element as
-       .o_renderer in Odoo 17, so target it directly. */
-    .o_kanban_renderer {
-        background: transparent !important;
-        display: grid !important;
-        grid-template-columns: repeat(6, 140px);
-        gap: 2.25rem 2.5rem;
-        max-width: 1100px;
-        width: 100%;
-        margin: 0 auto;
-        justify-content: center;
-        align-content: flex-start;
-    }
-    @media (max-width: 1180px) {
-        .o_kanban_renderer { grid-template-columns: repeat(4, 140px); }
-    }
-    @media (max-width: 760px) {
-        .o_kanban_renderer { grid-template-columns: repeat(3, 120px); gap: 1.5rem; }
-    }
-
-    /* Hide artifacts from grouped/quick-create modes that don't apply */
-    .o_kanban_header,
-    .o_column_quick_create,
-    .o_kanban_load_more { display: none !important; }
+/* Font hook */
+.o_omran_dashboard_pro,
+.o_omran_dashboard_pro * {
+    font-family: "saudi_riyal", "Inter", "Tajawal", -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
-/* The kanban auto-wraps each record in .o_kanban_record. We size the
-   wrapper as the tile cell, then let the inner <button> fill it so the
-   whole tile is one click target. */
-.o_kanban_view.o_omran_launcher .o_kanban_record {
-    width: 140px !important;
-    height: auto !important;
-    min-height: 0 !important;
-    aspect-ratio: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
+/* Sheet */
+.o_omran_dashboard_pro .o_form_sheet_bg { background: #{$omr-surface} !important; }
+.o_omran_dashboard_pro .o_form_sheet {
+    max-width: 1540px !important;
     background: transparent !important;
-    border: 0 !important;
     box-shadow: none !important;
+    padding: 1.5rem 1.5rem 2rem !important;
+    border: none !important;
 }
+.o_omran_dashboard_pro .o_form_statusbar { display: none !important; }
 
-.o_omran_app {
-    width: 100%;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.55rem;
-    background: transparent;
-    border: 0;
-    cursor: pointer;
-    transition: transform 0.15s ease;
-
-    &:hover { transform: translateY(-3px); background: transparent; }
-    &:focus { outline: none; }
-    &:focus-visible .o_omran_app_icon {
-        box-shadow: 0 0 0 3px rgba(30, 27, 75, 0.25);
-    }
-}
-
-.o_omran_app_icon {
-    width: 88px;
-    height: 88px;
-    border-radius: 22px;
-    background: #fff;
-    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.10),
-                0 1px 3px  rgba(15, 23, 42, 0.06);
+/* ====================== HERO ====================== */
+.omran_hero {
+    position: relative;
+    background:
+        radial-gradient(circle at 95% 15%, rgba(245, 197, 24, 0.22) 0%, transparent 40%),
+        radial-gradient(circle at 10% 90%, rgba(59, 130, 246, 0.15) 0%, transparent 45%),
+        linear-gradient(135deg, #{$omr-secondary} 0%, #{$omr-primary} 50%, #2D2A7B 100%);
+    border-radius: 20px;
+    padding: 2.5rem 2.75rem;
+    color: #fff;
+    margin-bottom: 1.75rem;
+    box-shadow: 0 20px 45px rgba(15, 14, 46, 0.3);
+    overflow: hidden;
     display: flex;
     align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    transition: box-shadow 0.18s ease, transform 0.18s ease;
-
-    img { max-width: 64%; max-height: 64%; object-fit: contain; }
+    justify-content: space-between;
+    gap: 2rem;
 }
-.o_omran_app:hover .o_omran_app_icon {
-    box-shadow: 0 14px 32px rgba(15, 23, 42, 0.16),
-                0 2px 6px  rgba(15, 23, 42, 0.08);
+.omran_hero_eyebrow {
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-weight: 600;
+    color: #{$omr-accent};
+    margin-bottom: 0.75rem;
 }
-
-.o_omran_app_name {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: $omr-text;
-    text-align: center;
-    line-height: 1.25;
-    letter-spacing: 0.005em;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.omran_hero_title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.02em;
+    color: #fff;
+}
+.omran_hero_sub {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    max-width: 540px;
+}
+.omran_hero_badge {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+    padding: 0.5rem 1rem;
     white-space: nowrap;
 }
+.omran_hero_dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #{$omr-accent};
+    animation: omran_pulse 2s ease-in-out infinite;
+}
+.omran_hero_label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #fff;
+}
+@keyframes omran_pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(245, 197, 24, 0.7); }
+    50%      { box-shadow: 0 0 0 8px rgba(245, 197, 24, 0); }
+}
+
+/* ====================== KPI PRIMARY ROW ====================== */
+.omran_kpi_row {
+    display: grid;
+    gap: 1.125rem;
+    margin-bottom: 1.5rem;
+}
+.omran_kpi_row_primary {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.omran_kpi {
+    background: #fff;
+    border: 1px solid #{$omr-border-lt};
+    border-radius: 16px;
+    padding: 1.5rem 1.625rem;
+    box-shadow: 0 1px 3px rgba(15, 14, 46, 0.04);
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+.omran_kpi::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: linear-gradient(90deg, #{$omr-border-lt}, transparent);
+    transition: all 0.22s ease;
+}
+.omran_kpi:hover {
+    box-shadow: 0 18px 36px rgba(15, 14, 46, 0.14);
+    transform: translateY(-4px);
+    border-color: #{$omr-accent};
+}
+.omran_kpi:hover::before {
+    background: linear-gradient(90deg, #{$omr-primary}, #{$omr-accent});
+}
+.omran_kpi_lg::before { background: #{$omr-primary}; }
+.omran_kpi_warning::before { background: #{$omr-warning}; }
+
+.omran_kpi_head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #{$omr-muted};
+    font-size: 0.8125rem;
+    font-weight: 600;
+    margin-bottom: 0.875rem;
+}
+.omran_kpi_head i {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: #{$omr-surface-2};
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #{$omr-primary};
+    font-size: 0.9375rem;
+}
+.omran_kpi_lg .omran_kpi_head i { background: rgba(30, 27, 75, 0.1); color: #{$omr-primary}; }
+.omran_kpi_warning .omran_kpi_head i { background: rgba(217, 119, 6, 0.1); color: #{$omr-warning}; }
+
+.omran_kpi_value,
+.omran_kpi .o_field_widget {
+    font-size: 2.125rem !important;
+    font-weight: 700 !important;
+    color: #{$omr-primary} !important;
+    line-height: 1.05 !important;
+    display: block !important;
+    margin-bottom: 0.5rem !important;
+    letter-spacing: -0.02em !important;
+}
+.omran_kpi_warning .o_field_widget { color: #{$omr-warning} !important; }
+
+.omran_kpi_sub {
+    font-size: 0.875rem;
+    color: #{$omr-muted};
+    padding-top: 0.625rem;
+    border-top: 1px solid #{$omr-surface-2};
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+.omran_kpi_sub .o_field_widget {
+    font-size: 0.875rem !important;
+    font-weight: 700 !important;
+    color: #{$omr-text} !important;
+    display: inline !important;
+    margin: 0 !important;
+}
+
+/* ====================== SECTION + SM KPI MINI TILES ====================== */
+.omran_section { margin-bottom: 1.5rem; }
+.omran_section_h {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #{$omr-muted};
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0.25rem 0.875rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #{$omr-border-lt};
+}
+
+.omran_kpi_row_sm {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.875rem;
+}
+.omran_mini {
+    background: #fff;
+    border: 1px solid #{$omr-border-lt};
+    border-radius: 12px;
+    padding: 1rem 1.125rem;
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    transition: all 0.18s ease;
+    box-shadow: 0 1px 2px rgba(15, 14, 46, 0.04);
+}
+.omran_mini:hover {
+    border-color: #{$omr-primary};
+    box-shadow: 0 8px 18px rgba(15, 14, 46, 0.08);
+    transform: translateY(-2px);
+}
+.omran_mini_icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #{$omr-primary}, #{$omr-secondary});
+    color: #{$omr-accent};
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.omran_mini_value,
+.omran_mini .o_field_widget {
+    font-size: 1.375rem !important;
+    font-weight: 700 !important;
+    color: #{$omr-primary} !important;
+    display: block !important;
+    line-height: 1 !important;
+    margin-bottom: 0.2rem !important;
+}
+.omran_mini_label {
+    font-size: 0.8125rem;
+    color: #{$omr-muted};
+    font-weight: 500;
+}
+
+/* ====================== PROGRESS BAR CARDS ====================== */
+.omran_progress_row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+}
+.omran_prog_card {
+    background: #fff;
+    border: 1px solid #{$omr-border-lt};
+    border-radius: 14px;
+    padding: 1.125rem 1.25rem;
+    box-shadow: 0 1px 2px rgba(15, 14, 46, 0.04);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.18s ease;
+}
+.omran_prog_card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+}
+.omran_prog_success_card::before { background: #{$omr-success}; }
+.omran_prog_primary_card::before { background: #{$omr-primary}; }
+.omran_prog_accent_card::before  { background: #{$omr-accent}; }
+.omran_prog_card:hover {
+    box-shadow: 0 10px 24px rgba(15, 14, 46, 0.1);
+    transform: translateY(-2px);
+}
+.omran_prog_label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #{$omr-muted};
+    text-transform: none;
+    margin-bottom: 0.625rem;
+}
+.omran_prog_note {
+    font-size: 0.75rem;
+    color: #{$omr-faint};
+    margin-top: 0.5rem;
+}
+
+/* Style the Odoo progressbar widget */
+.omran_prog_card .o_progressbar {
+    height: 28px !important;
+    border-radius: 999px !important;
+    background: #{$omr-surface-2} !important;
+    overflow: hidden;
+    border: none !important;
+    position: relative;
+}
+.omran_prog_card .o_progressbar .o_progressbar_complete,
+.omran_prog_card .o_progressbar .o_progress,
+.omran_prog_card .o_progressbar > span:first-child {
+    height: 100% !important;
+    border-radius: 999px !important;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.omran_prog_success_card .o_progressbar .o_progressbar_complete,
+.omran_prog_success_card .o_progressbar .o_progress,
+.omran_prog_success_card .o_progressbar > span:first-child {
+    background: linear-gradient(90deg, #{$omr-success}, #22C55E) !important;
+}
+.omran_prog_primary_card .o_progressbar .o_progressbar_complete,
+.omran_prog_primary_card .o_progressbar .o_progress,
+.omran_prog_primary_card .o_progressbar > span:first-child {
+    background: linear-gradient(90deg, #{$omr-primary}, #{$omr-secondary}) !important;
+}
+.omran_prog_accent_card .o_progressbar .o_progressbar_complete,
+.omran_prog_accent_card .o_progressbar .o_progress,
+.omran_prog_accent_card .o_progressbar > span:first-child {
+    background: linear-gradient(90deg, #{$omr-accent}, #{$omr-accent-dk}) !important;
+}
+
+/* The % value inside the bar */
+.omran_prog_card .o_progressbar span.o_progressbar_value,
+.omran_prog_card .o_progressbar .o_progressbar_label {
+    color: #fff !important;
+    font-weight: 700 !important;
+    font-size: 0.875rem !important;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* ====================== TWO-COLUMN PANELS ====================== */
+.omran_two_col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-top: 0.5rem;
+}
+@media (max-width: 1024px) {
+    .omran_two_col { grid-template-columns: 1fr; }
+}
+
+.omran_panel {
+    background: #fff;
+    border: 1px solid #{$omr-border-lt};
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(15, 14, 46, 0.04);
+    overflow: hidden;
+}
+.omran_panel_head {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(90deg, #{$omr-surface}, #fff);
+    border-bottom: 1px solid #{$omr-border-lt};
+}
+.omran_panel_head i {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: #{$omr-primary};
+    color: #{$omr-accent};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+.omran_panel_head h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #{$omr-text};
+    margin: 0;
+}
+
+.omran_panel_body {
+    padding: 0.5rem 1.5rem 1.25rem;
+}
+
+/* Finance snapshot rows */
+.omran_panel_row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #{$omr-surface-2};
+}
+.omran_panel_row:last-child { border-bottom: none; }
+.omran_panel_row_total {
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+    border-top: 2px solid #{$omr-border} !important;
+    border-bottom: none;
+}
+.omran_panel_label {
+    font-size: 0.9375rem;
+    color: #{$omr-muted};
+    font-weight: 500;
+}
+.omran_panel_value,
+.omran_panel_row .o_field_widget {
+    font-size: 1.0625rem !important;
+    font-weight: 700 !important;
+    color: #{$omr-text} !important;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+.omran_panel_warn { color: #{$omr-warning} !important; }
+.omran_panel_primary { color: #{$omr-primary} !important; font-size: 1.1875rem !important; }
+
+/* Quick actions as richer buttons */
+.omran_panel_actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    padding-top: 1rem;
+}
+.omran_action_btn {
+    display: flex !important;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem !important;
+    background: #fff !important;
+    border: 1px solid #{$omr-border-lt} !important;
+    border-radius: 12px !important;
+    color: #{$omr-text} !important;
+    text-align: left !important;
+    transition: all 0.15s ease;
+    cursor: pointer;
+}
+.omran_action_btn:hover {
+    border-color: #{$omr-primary} !important;
+    background: #{$omr-surface} !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(15, 14, 46, 0.08);
+}
+.omran_action_btn > i {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    background: #{$omr-surface-2};
+    color: #{$omr-primary};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+}
+.omran_action_btn:hover > i {
+    background: #{$omr-primary};
+    color: #{$omr-accent};
+}
+.omran_action_title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #{$omr-text};
+    line-height: 1.2;
+}
+.omran_action_sub {
+    font-size: 0.8125rem;
+    color: #{$omr-muted};
+    margin-top: 0.125rem;
+}
+.omran_action_primary {
+    background: linear-gradient(135deg, #{$omr-primary}, #{$omr-secondary}) !important;
+    border-color: transparent !important;
+    color: #fff !important;
+}
+.omran_action_primary > i {
+    background: rgba(245, 197, 24, 0.25) !important;
+    color: #{$omr-accent} !important;
+}
+.omran_action_primary .omran_action_title { color: #fff; }
+.omran_action_primary .omran_action_sub   { color: rgba(255, 255, 255, 0.75); }
+.omran_action_primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(15, 14, 46, 0.3);
+}
+
+/* ====================== CLICKABLE KPI BUTTONS ======================
+   The KPI cards are rendered as <button type="object" .../> so a click
+   opens a filtered list. Reset native button chrome and let the cards
+   keep their existing visual treatment. */
+.o_omran_dashboard_pro .omran_kpi_btn,
+.o_omran_dashboard_pro .omran_mini_btn {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border: 0;
+    padding: inherit;
+    margin: 0;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    width: 100%;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+.o_omran_dashboard_pro .omran_kpi_btn:hover,
+.o_omran_dashboard_pro .omran_mini_btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(15, 14, 46, 0.14) !important;
+}
+.o_omran_dashboard_pro .omran_kpi_btn:focus-visible,
+.o_omran_dashboard_pro .omran_mini_btn:focus-visible {
+    outline: 2px solid #{$omr-accent};
+    outline-offset: 2px;
+}
+.o_omran_dashboard_pro .omran_kpi_btn::after {
+    content: "↗";
+    position: absolute;
+    top: 0.75rem;
+    right: 1rem;
+    color: #{$omr-faint};
+    font-size: 0.875rem;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+.o_omran_dashboard_pro .omran_kpi_btn:hover::after { opacity: 0.65; }
+
+/* ====================== RESPONSIVE ====================== */
+@media (max-width: 768px) {
+    .omran_hero {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.75rem 1.75rem;
+    }
+    .omran_hero_title { font-size: 1.75rem; }
+    .omran_panel_actions { grid-template-columns: 1fr; }
+}
 
 
-/* ====================== APPS PAGE (Settings → Apps) ====================== */
+/* ============================================================
+   APPS PAGE (Settings → Apps) — match the Odoo Enterprise look
+   Bigger rounded white tiles on a soft lavender canvas.
+   Independent of the home dashboard above.
+   ============================================================ */
 
-/* Same lavender canvas + bigger rounded white tiles. Keep the
-   description and Activate button so the install flow still works. */
+$omr-apps-bg: linear-gradient(135deg, #ECEAF6 0%, #F4F2FA 100%);
+
 .o_kanban_view.o_modules_kanban {
-    background: $omr-launch-bg-light !important;
+    background: $omr-apps-bg !important;
 
     .o_kanban_renderer {
         background: transparent !important;
@@ -177,13 +605,13 @@ $omr-launch-bg-light: linear-gradient(135deg, #ECEAF6 0%, #F4F2FA 100%);
     .o_kanban_record_title {
         font-size: 0.95rem !important;
         font-weight: 600 !important;
-        color: $omr-text !important;
+        color: #{$omr-text} !important;
         margin: 0 0 0.25rem !important;
         line-height: 1.25;
     }
     .oe_module_name {
         font-size: 0.8125rem !important;
-        color: $omr-muted !important;
+        color: #{$omr-muted} !important;
         margin: 0 0 0.625rem !important;
         line-height: 1.35;
     }
@@ -194,11 +622,11 @@ $omr-launch-bg-light: linear-gradient(135deg, #ECEAF6 0%, #F4F2FA 100%);
         font-size: 0.8125rem !important;
     }
     .oe_module_action .btn-primary {
-        background: $omr-primary !important;
-        border-color: $omr-primary !important;
+        background: #{$omr-primary} !important;
+        border-color: #{$omr-primary} !important;
     }
     .oe_module_action .btn-primary:hover {
-        background: $omr-primary-dk !important;
-        border-color: $omr-primary-dk !important;
+        background: #{$omr-primary-dk} !important;
+        border-color: #{$omr-primary-dk} !important;
     }
 }
