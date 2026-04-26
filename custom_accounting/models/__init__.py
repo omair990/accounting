@@ -8,3 +8,4 @@ from . import account_payment
 from . import account_reconcile
 from . import res_partner
 from . import res_company
+from . import accounting_dashboard

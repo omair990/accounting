@@ -1,59 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Accounting Dashboard: Kanban View of Journals -->
-    <record id="view_account_journal_dashboard_kanban" model="ir.ui.view">
-        <field name="name">account.journal.dashboard.kanban</field>
-        <field name="model">account.journal</field>
+    <!-- 4-card accounting dashboard: Sales / Purchases / Bank / Tax Returns. -->
+    <record id="view_accounting_dashboard_form" model="ir.ui.view">
+        <field name="name">accounting.dashboard.form</field>
+        <field name="model">accounting.dashboard</field>
         <field name="arch" type="xml">
-            <kanban class="o_kanban_dashboard" create="false">
-                <field name="name"/>
-                <field name="type"/>
-                <field name="code"/>
-                <field name="color"/>
-                <templates>
-                    <t t-name="kanban-box">
-                        <div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''} oe_kanban_global_click">
-                            <div class="o_kanban_card_header">
-                                <div class="o_kanban_card_header_title">
-                                    <div class="o_primary">
-                                        <field name="name"/>
-                                    </div>
-                                    <div class="o_secondary">
-                                        <field name="type"/>
-                                    </div>
-                                </div>
+            <form create="false" edit="false" delete="false" class="o_acc_dashboard">
+                <sheet>
+                    <div class="acc_dash_grid">
+
+                        <!-- ============== SALES ============== -->
+                        <div class="acc_dash_card acc_dash_sales">
+                            <div class="acc_dash_card_head">
+                                <h3 class="acc_dash_h">Sales</h3>
+                                <p class="acc_dash_sub">Get paid online. Send electronic invoices.</p>
+                                <button type="object" name="action_create_invoice"
+                                        class="btn btn-primary acc_dash_btn">New</button>
                             </div>
-                            <div class="container o_kanban_card_content">
-                                <div class="row">
-                                    <div class="col-6 o_kanban_primary_left">
-                                        <span class="fw-bold">Code: </span>
-                                        <field name="code"/>
+                            <div class="acc_dash_chart">
+                                <button type="object" name="action_open_invoices_due" class="acc_dash_bar_btn" title="Past due">
+                                    <div class="acc_dash_bar acc_dash_bar_due">
+                                        <div class="acc_dash_bar_fill" t-att-style="'height:%s%%' % bar_pct_due"/>
                                     </div>
+                                    <span class="acc_dash_bar_label">Due</span>
+                                </button>
+                                <button type="object" name="action_open_invoices_open" class="acc_dash_bar_btn">
+                                    <div class="acc_dash_bar">
+                                        <div class="acc_dash_bar_fill" t-att-style="'height:%s%%' % bar_pct_w1"/>
+                                    </div>
+                                    <span class="acc_dash_bar_label"><field name="label_w1" nolabel="1" readonly="1"/></span>
+                                </button>
+                                <button type="object" name="action_open_invoices_open" class="acc_dash_bar_btn">
+                                    <div class="acc_dash_bar">
+                                        <div class="acc_dash_bar_fill" t-att-style="'height:%s%%' % bar_pct_w2"/>
+                                    </div>
+                                    <span class="acc_dash_bar_label"><field name="label_w2" nolabel="1" readonly="1"/></span>
+                                </button>
+                                <button type="object" name="action_open_invoices_open" class="acc_dash_bar_btn">
+                                    <div class="acc_dash_bar">
+                                        <div class="acc_dash_bar_fill" t-att-style="'height:%s%%' % bar_pct_w3"/>
+                                    </div>
+                                    <span class="acc_dash_bar_label"><field name="label_w3" nolabel="1" readonly="1"/></span>
+                                </button>
+                                <button type="object" name="action_open_invoices_open" class="acc_dash_bar_btn">
+                                    <div class="acc_dash_bar">
+                                        <div class="acc_dash_bar_fill" t-att-style="'height:%s%%' % bar_pct_w4"/>
+                                    </div>
+                                    <span class="acc_dash_bar_label"><field name="label_w4" nolabel="1" readonly="1"/></span>
+                                </button>
+                                <button type="object" name="action_open_invoices_open" class="acc_dash_bar_btn" title="Future">
+                                    <div class="acc_dash_bar">
+                                        <div class="acc_dash_bar_fill" t-att-style="'height:%s%%' % bar_pct_not_due"/>
+                                    </div>
+                                    <span class="acc_dash_bar_label">Not Due</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- ============== PURCHASES ============== -->
+                        <div class="acc_dash_card acc_dash_purchases">
+                            <div class="acc_dash_card_head">
+                                <h3 class="acc_dash_h">Purchases</h3>
+                                <p class="acc_dash_sub">Manage and pay vendor bills.</p>
+                            </div>
+                            <div class="acc_dash_purchases_body">
+                                <button type="object" name="action_create_bill"
+                                        class="btn btn-primary acc_dash_btn_lg">
+                                    <i class="fa fa-plus"/> Create a bill manually
+                                </button>
+                                <div class="acc_dash_count">
+                                    <button type="object" name="action_open_bills_draft" class="acc_dash_count_btn">
+                                        <field name="bills_draft_count" nolabel="1" readonly="1" class="acc_dash_count_n"/>
+                                        <span class="acc_dash_count_l"> drafts pending review</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                    </t>
-                </templates>
-            </kanban>
+
+                        <!-- ============== BANK ============== -->
+                        <div class="acc_dash_card acc_dash_bank">
+                            <div class="acc_dash_card_head">
+                                <h3 class="acc_dash_h">Bank</h3>
+                                <p class="acc_dash_sub">Configure your bank journals to record receipts and payments.</p>
+                            </div>
+                            <div class="acc_dash_bank_body">
+                                <button type="object" name="action_open_bank_journals"
+                                        class="btn btn-primary acc_dash_btn_lg">
+                                    <i class="fa fa-university"/> Configure your banks
+                                </button>
+                                <div class="acc_dash_count">
+                                    <button type="object" name="action_open_bank_journals" class="acc_dash_count_btn">
+                                        <field name="bank_journal_count" nolabel="1" readonly="1" class="acc_dash_count_n"/>
+                                        <span class="acc_dash_count_l"> bank journal(s) configured</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ============== TAX RETURNS ============== -->
+                        <div class="acc_dash_card acc_dash_tax">
+                            <div class="acc_dash_card_head">
+                                <h3 class="acc_dash_h">Tax Returns</h3>
+                                <p class="acc_dash_sub">Get ready for your next tax filing.</p>
+                                <button type="object" name="action_open_review_queue"
+                                        class="btn btn-secondary acc_dash_btn">Tax Returns</button>
+                            </div>
+                            <ul class="acc_dash_check">
+                                <li t-attf-class="acc_dash_check_item #{company_data_set ? 'done' : ''}">
+                                    <button type="object" name="action_open_company_settings" class="acc_dash_check_btn">
+                                        <i class="fa fa-check-circle acc_dash_check_icon"/>
+                                        Set company data
+                                    </button>
+                                </li>
+                                <li t-attf-class="acc_dash_check_item #{periods_set ? 'done' : ''}">
+                                    <button type="object" name="action_open_company_settings" class="acc_dash_check_btn">
+                                        <i class="fa fa-check-circle acc_dash_check_icon"/>
+                                        Set periods (lock dates)
+                                    </button>
+                                </li>
+                                <li t-attf-class="acc_dash_check_item #{coa_reviewed ? 'done' : ''}">
+                                    <button type="object" name="action_open_chart_of_accounts" class="acc_dash_check_btn">
+                                        <i class="fa fa-check-circle acc_dash_check_icon"/>
+                                        Review chart of accounts
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Hidden fields for bar widths to evaluate -->
+                    <field name="bar_pct_due" invisible="1"/>
+                    <field name="bar_pct_w1" invisible="1"/>
+                    <field name="bar_pct_w2" invisible="1"/>
+                    <field name="bar_pct_w3" invisible="1"/>
+                    <field name="bar_pct_w4" invisible="1"/>
+                    <field name="bar_pct_not_due" invisible="1"/>
+                    <field name="company_data_set" invisible="1"/>
+                    <field name="periods_set" invisible="1"/>
+                    <field name="coa_reviewed" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                </sheet>
+            </form>
         </field>
     </record>
 
-    <!-- Action: Dashboard -->
-    <record id="action_account_dashboard" model="ir.actions.act_window">
+    <!-- Action: replace the old action_account_dashboard target -->
+    <record id="action_account_dashboard" model="ir.actions.server">
         <field name="name">Accounting Dashboard</field>
-        <field name="res_model">account.journal</field>
-        <field name="view_mode">kanban,list,form</field>
+        <field name="model_id" ref="model_accounting_dashboard"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open_accounting_dashboard()</field>
+    </record>
+
+    <!-- Review queue action -->
+    <record id="action_review_queue" model="ir.actions.act_window">
+        <field name="name">Review</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state','=','draft'),('move_type','in',('out_invoice','in_invoice'))]</field>
         <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Welcome to the Accounting Dashboard
-            </p>
-            <p>
-                Configure your journals to start recording transactions.
-            </p>
+            <p class="o_view_nocontent_smiling_face">No drafts pending review.</p>
+            <p>Drafts of customer invoices and vendor bills appear here for validation.</p>
         </field>
     </record>
 
-    <!-- Overdue Invoices Action (smart button style) -->
+    <!-- Overdue Invoices Action (kept for backward compatibility) -->
     <record id="action_overdue_invoices" model="ir.actions.act_window">
         <field name="name">Overdue Invoices</field>
         <field name="res_model">account.move</field>
@@ -61,9 +172,7 @@
         <field name="domain">[('is_overdue', '=', True)]</field>
         <field name="context">{'search_default_filter_overdue': 1}</field>
         <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                No overdue invoices!
-            </p>
+            <p class="o_view_nocontent_smiling_face">No overdue invoices!</p>
         </field>
     </record>
 </odoo>

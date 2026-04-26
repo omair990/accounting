@@ -28,3 +28,4 @@ access_report_wizard_accountant,account.report.wizard.accountant,model_account_r
 access_report_wizard_manager,account.report.wizard.manager,model_account_report_wizard,group_account_manager,1,1,1,1
 access_payment_register_accountant,account.payment.register.accountant,model_account_payment_register,group_account_accountant,1,1,1,0
 access_payment_register_manager,account.payment.register.manager,model_account_payment_register,group_account_manager,1,1,1,1
+access_accounting_dashboard_user,accounting.dashboard.user,model_accounting_dashboard,base.group_user,1,1,1,1

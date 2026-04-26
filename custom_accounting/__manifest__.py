@@ -58,6 +58,11 @@
         'views/menu_items.xml',
     ],
     'demo': [],
+    'assets': {
+        'web.assets_backend': [
+            'custom_accounting/static/src/scss/dashboard.scss',
+        ],
+    },
     'installable': True,
     'application': True,
     'auto_install': False,

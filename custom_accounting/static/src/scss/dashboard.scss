@@ -1,0 +1,196 @@
+/* ===== Custom Accounting Dashboard — 4-card layout =====
+   Visual structure inspired by enterprise accounting dashboards but
+   built from scratch for Community. No proprietary code. */
+
+$accd-primary:   #1E1B4B;
+$accd-accent:    #875A7B;     /* purple-pink for "Sales" header */
+$accd-text:      #0F172A;
+$accd-muted:     #64748B;
+$accd-border:    #E2E8F0;
+$accd-bg-card:   #FFFFFF;
+$accd-bg-page:   #F8FAFC;
+
+.o_acc_dashboard {
+    background: #{$accd-bg-page};
+}
+.o_acc_dashboard .o_form_sheet_bg { background: #{$accd-bg-page} !important; }
+.o_acc_dashboard .o_form_sheet {
+    max-width: 1300px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 1.25rem !important;
+}
+.o_acc_dashboard .o_form_statusbar { display: none !important; }
+
+/* Grid */
+.acc_dash_grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+}
+@media (max-width: 992px) {
+    .acc_dash_grid { grid-template-columns: 1fr; }
+}
+
+/* Card shell */
+.acc_dash_card {
+    background: #{$accd-bg-card};
+    border: 1px solid #{$accd-border};
+    border-radius: 6px;
+    padding: 1.5rem 1.5rem 1.25rem;
+    box-shadow: 0 1px 3px rgba(15, 14, 46, 0.04);
+    min-height: 280px;
+    position: relative;
+    border-left: 4px solid #{$accd-accent};
+}
+
+.acc_dash_h {
+    color: #{$accd-accent};
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0 0 0.25rem;
+    letter-spacing: 0.01em;
+}
+.acc_dash_sub {
+    color: #{$accd-muted};
+    font-size: 0.875rem;
+    margin: 0 0 1rem;
+    line-height: 1.45;
+}
+.acc_dash_btn {
+    border-radius: 4px !important;
+    padding: 0.4rem 1rem !important;
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    margin-bottom: 1rem;
+}
+.acc_dash_btn_lg {
+    padding: 0.625rem 1.25rem !important;
+    font-size: 0.9375rem !important;
+    margin: 1.5rem auto;
+    display: inline-flex !important;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* ----- Sales chart ----- */
+.acc_dash_chart {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.5rem;
+    align-items: end;
+    height: 160px;
+    padding: 0 0.25rem;
+}
+.acc_dash_bar_btn {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    min-height: 100%;
+    transition: opacity 0.15s ease;
+}
+.acc_dash_bar_btn:hover { opacity: 0.85; }
+.acc_dash_bar {
+    width: 100%;
+    height: 110px;
+    background: #F1F5F9;
+    border-radius: 3px 3px 0 0;
+    position: relative;
+    overflow: hidden;
+}
+.acc_dash_bar_fill {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(180deg, #C4B0BC 0%, #{$accd-accent} 100%);
+    border-radius: 3px 3px 0 0;
+    transition: height 0.3s ease;
+    min-height: 0;
+}
+.acc_dash_bar_due .acc_dash_bar_fill {
+    background: linear-gradient(180deg, #FCA5A5 0%, #DC2626 100%);
+}
+.acc_dash_bar_label {
+    font-size: 0.6875rem;
+    color: #{$accd-muted};
+    text-align: center;
+    line-height: 1.1;
+    white-space: nowrap;
+}
+
+/* ----- Purchases body ----- */
+.acc_dash_purchases_body,
+.acc_dash_bank_body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-top: 1rem;
+}
+.acc_dash_count {
+    margin-top: 0.5rem;
+}
+.acc_dash_count_btn {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    color: #{$accd-text};
+    font-size: 0.9375rem;
+    transition: color 0.15s ease;
+}
+.acc_dash_count_btn:hover {
+    color: #{$accd-accent};
+    text-decoration: underline;
+}
+.acc_dash_count_n {
+    font-weight: 700;
+    color: #{$accd-accent};
+}
+.acc_dash_count_l {
+    color: #{$accd-muted};
+}
+
+/* ----- Tax Returns checklist ----- */
+.acc_dash_check {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0;
+}
+.acc_dash_check_item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-top: 1px solid #{$accd-border};
+}
+.acc_dash_check_item:first-child { border-top: 0; }
+.acc_dash_check_btn {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    text-align: left;
+    cursor: pointer;
+    color: #{$accd-text};
+    font-size: 0.9375rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+.acc_dash_check_btn:hover { color: #{$accd-accent}; }
+.acc_dash_check_icon {
+    color: #CBD5E1;
+    font-size: 1.125rem;
+}
+.acc_dash_check_item.done .acc_dash_check_icon {
+    color: #16A34A;
+}

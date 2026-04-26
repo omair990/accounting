@@ -79,6 +79,13 @@
         parent="menu_accounting_root"
         sequence="30"/>
 
+    <!-- ===================== REVIEW ===================== -->
+    <menuitem id="menu_accounting_review"
+        name="Review"
+        parent="menu_accounting_root"
+        action="action_review_queue"
+        sequence="35"/>
+
     <menuitem id="menu_accounting_journal_entries"
         name="Journal Entries"
         parent="menu_accounting_entries"
